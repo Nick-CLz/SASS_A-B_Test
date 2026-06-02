@@ -35,6 +35,7 @@ package = false
 line-length = 100
 target-version = "py312"
 src = ["app", "tests"]
+extend-exclude = ["alembic/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "C4"]

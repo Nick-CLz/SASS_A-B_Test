@@ -179,3 +179,19 @@ pre-period (no separate table needed). The analytics adapter computes the
   "grounded, never invents numbers" guarantee and for enterprise trust.
 - **No PII in the event store** is enforced structurally (typed allow-list + ingestion guard),
   not by policy alone.
+
+## Implementation notes (P02)
+The metadata tables above are implemented as SQLModel models in `backend/app/models/` with an
+Alembic initial migration. A few faithful, minor choices:
+- **`org_id` on every tenant-scoped table** (all except `organization` and the global `user`),
+  so M6 isolation is a filter change, not a migration.
+- **Enums** are stored as **non-native checked VARCHARs** (`Enum(..., native_enum=False)`),
+  which keeps migrations simple across Postgres/SQLite and avoids native PG enum churn.
+- **JSON columns** use `JSON().with_variant(JSONB, "postgresql")` → **JSONB on Postgres**, JSON
+  elsewhere. Their *contents* are typed `dict`/`list` for now; the typed Pydantic payload
+  sub-models (allocation, targeting, method, …) arrive with the API schemas in **P03**.
+- **Tests run on SQLite** (the build sandbox/CI has no Docker/Postgres). The schema is
+  dialect-portable, the migration applies on both, and the round-trip test exercises every
+  table. A Postgres service can be added to CI later for belt-and-suspenders.
+- `agent_run.model` sets pydantic `protected_namespaces=()` (the `model_` namespace);
+  the `user` table relies on SQLAlchemy quoting the reserved word.
