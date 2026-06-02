@@ -13,7 +13,10 @@ import pytest
 from alembic import command
 from alembic.config import Config
 from app.core.config import get_settings
-from app.core.db import make_engine
+from app.core.db import get_session, make_engine
+from app.main import app
+from app.models import Organization, Workspace
+from fastapi.testclient import TestClient
 from sqlalchemy.engine import Engine
 from sqlmodel import Session
 
@@ -44,3 +47,31 @@ def session(migrated_engine: Engine) -> Iterator[Session]:
     """A session on the migrated database."""
     with Session(migrated_engine) as session:
         yield session
+
+
+@pytest.fixture
+def client(migrated_engine: Engine) -> Iterator[TestClient]:
+    """A TestClient whose DB session is bound to the migrated test database."""
+
+    def _override_session() -> Iterator[Session]:
+        with Session(migrated_engine) as test_session:
+            yield test_session
+
+    app.dependency_overrides[get_session] = _override_session
+    yield TestClient(app)
+    app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def tenant(migrated_engine: Engine) -> dict[str, str]:
+    """Create an org + workspace; return their ids (workspace_id is the X-Workspace-Id)."""
+    with Session(migrated_engine) as setup_session:
+        org = Organization(name="Acme", slug="acme")
+        setup_session.add(org)
+        setup_session.commit()
+        setup_session.refresh(org)
+        workspace = Workspace(org_id=org.id, name="Web", slug="web")
+        setup_session.add(workspace)
+        setup_session.commit()
+        setup_session.refresh(workspace)
+        return {"org_id": str(org.id), "workspace_id": str(workspace.id)}
