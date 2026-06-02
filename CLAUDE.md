@@ -32,16 +32,18 @@ they never compute or invent statistics themselves.
 - **Layout:** `backend/`, `frontend/`, `sdks/`, `infra/`. Each has a README describing its
   internal structure.
 
-## Commands (filled in by P01)
+## Commands (verified in P01)
 ```bash
 # backend
-cd backend && uv sync && uvicorn app.main:app --reload       # run API
-cd backend && pytest                                          # tests
-cd backend && ruff check . && mypy app                        # lint + types
+cd backend && uv sync && uv run uvicorn app.main:app --reload   # run API (:8000)
+cd backend && uv run pytest                                      # tests
+cd backend && uv run ruff check . && uv run mypy app             # lint + types
 # frontend
-cd frontend && pnpm install && pnpm dev                       # run dashboard
+cd frontend && pnpm install && pnpm dev                          # run dashboard (:3000)
+cd frontend && pnpm test && pnpm lint && pnpm build              # test + lint + build
 # everything (local)
-docker compose up                                             # postgres + api + web
+docker compose -f infra/docker-compose.yml up db                 # postgres (api/web: --profile full)
+make setup && make test                                          # via Makefile
 ```
 
 ## Where to look

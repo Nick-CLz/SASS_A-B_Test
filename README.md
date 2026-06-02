@@ -99,9 +99,11 @@ Full rationale (and the alternatives considered) is in
 
 ## Status
 
-📋 **Planning complete; build not started.** The `backend/`, `frontend/`, `sdks/`, and
-`infra/` directories currently contain only READMEs describing what each prompt will fill
-in. Nothing here computes statistics yet — that's `P07`/`P08`.
+🏗️ **Planning complete; M0 (scaffold, `P01`) done.** The backend (FastAPI, `GET /v1/health`,
+ruff + mypy + pytest green) and the frontend (Next.js + TS + Tailwind, lint + vitest + build
+green) are scaffolded, with CI wired. Next: `P02` (data model) → `P03` (experiment API) →
+`P04` (assignment). `sdks/` is still a placeholder until `P05`. Nothing computes statistics
+yet — that's `P07`/`P08`. Run `make setup && make test` to verify locally.
 
 ## License
 
