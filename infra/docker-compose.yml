@@ -1,0 +1,52 @@
+# Local development stack for Mallard.
+# Usage (from repo root):  docker compose -f infra/docker-compose.yml up
+#
+# This file is part of the SCAFFOLD. The `api` and `web` services reference Dockerfiles
+# that prompt P01 creates. Until then, `db` works on its own:
+#   docker compose -f infra/docker-compose.yml up db
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: mallard
+      POSTGRES_PASSWORD: mallard
+      POSTGRES_DB: mallard
+    ports:
+      - "5432:5432"
+    volumes:
+      - mallard_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mallard"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile          # created by P01
+    env_file:
+      - ../.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://mallard:mallard@db:5432/mallard
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["full"]                # `--profile full` once backend exists
+
+  web:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile          # created by P10
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    profiles: ["full"]
+
+volumes:
+  mallard_pgdata:

@@ -1,0 +1,10 @@
+Copyright (c) 2026 Mallard (working title). All rights reserved.
+
+This software and associated documentation files (the "Software") are proprietary
+and confidential during the planning and pre-release phase. No license, express or
+implied, is granted to copy, modify, distribute, or use the Software except by the
+copyright holder, pending a final licensing decision.
+
+An open-core licensing model (e.g. an Apache-2.0 / MIT core with a commercial layer)
+is under consideration; see docs/08-go-to-market.md. Until this file is replaced with
+a specific open-source or commercial license, treat the contents as all-rights-reserved.

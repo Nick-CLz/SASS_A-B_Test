@@ -1,0 +1,2 @@
+# Local analytics artifacts (DuckDB files, Parquet) live here and are gitignored.
+# This file keeps the directory in version control.
