@@ -73,10 +73,10 @@
       <span class="badge">FastAPI · Next.js · Postgres · Claude</span>
     </div>
     <div class="stats">
-      <div class="stat"><b>2 / 7</b><span>milestones (M0 done, M1 ~80%)</span></div>
-      <div class="stat"><b>4½</b><span>of 16 build prompts shipped</span></div>
-      <div class="stat"><b>39 ✓</b><span>backend tests green</span></div>
-      <div class="stat"><b>CI ✓</b><span>lint · types · tests</span></div>
+      <div class="stat"><b>3 / 7</b><span>milestones (M0–M2 done)</span></div>
+      <div class="stat"><b>8 / 16</b><span>build prompts shipped</span></div>
+      <div class="stat"><b>69 ✓</b><span>backend tests green</span></div>
+      <div class="stat"><b>beta</b><span>runnable end-to-end</span></div>
     </div>
   </div>
 
@@ -100,13 +100,13 @@
   </div>
 
   <h2>Build progress</h2>
-  <div class="bar" title="overall"><i style="width:28%"></i></div>
-  <p style="color:#64748b;font-size:13.5px;margin:0 0 14px">Plan &amp; prompts complete · M0 shipped · M1 (engine) nearly done · stats &amp; agents next.</p>
+  <div class="bar" title="overall"><i style="width:50%"></i></div>
+  <p style="color:#64748b;font-size:13.5px;margin:0 0 14px">Engine + statistics + analysis are done and a beta runs end-to-end. Next: advanced stats, dashboard, and the AI agents.</p>
   <div class="road">
     <div class="ms done"><span class="m">M0 · Scaffold</span><span class="d">Repo, FastAPI + Next.js, CI, docker — <span class="mono">P01</span></span><span class="pill p-ok">DONE · merged</span></div>
-    <div class="ms work"><span class="m">M1 · Engine</span><span class="d">Data model <span class="mono">P02</span> ✓ · Experiment API + lifecycle <span class="mono">P03</span> ✓ · Assignment engine <span class="mono">P04</span> ✓ · SDKs <span class="mono">P05</span> 🔨</span><span class="pill p-work">IN PROGRESS</span></div>
-    <div class="ms"><span class="m">M2 · Data + stats</span><span class="d">Event ingestion + DuckDB <span class="mono">P06</span> · Frequentist engine, SRM, power <span class="mono">P07</span></span><span class="pill p-plan">PLANNED</span></div>
-    <div class="ms"><span class="m">M3 · Dashboard</span><span class="d">Results API <span class="mono">P09</span> · Next.js dashboard <span class="mono">P10</span></span><span class="pill p-plan">PLANNED</span></div>
+    <div class="ms done"><span class="m">M1 · Engine</span><span class="d">Data model <span class="mono">P02</span> · Experiment API + lifecycle <span class="mono">P03</span> · Assignment engine <span class="mono">P04</span> · SDKs <span class="mono">P05</span></span><span class="pill p-ok">DONE</span></div>
+    <div class="ms done"><span class="m">M2 · Data + stats</span><span class="d">Ingestion + DuckDB <span class="mono">P06</span> · Frequentist engine + SRM + power <span class="mono">P07</span> · Analysis API <span class="mono">P09</span></span><span class="pill p-ok">DONE</span></div>
+    <div class="ms"><span class="m">M3 · Dashboard</span><span class="d">Next.js results UI, SRM banner, CUPED toggle <span class="mono">P10</span></span><span class="pill p-plan">PLANNED</span></div>
     <div class="ms"><span class="m">M4 · Adv. stats</span><span class="d">CUPED · sequential · Bayesian · segments <span class="mono">P08</span></span><span class="pill p-plan">PLANNED</span></div>
     <div class="ms"><span class="m">M5 · AI agents</span><span class="d">Foundation <span class="mono">P11</span> · Designer <span class="mono">P12</span> · Monitor <span class="mono">P13</span> · Analyst + Readout <span class="mono">P14</span></span><span class="pill p-plan">PLANNED</span></div>
     <div class="ms"><span class="m">M6 · SaaS</span><span class="d">Multi-tenancy, auth, RBAC, audit <span class="mono">P15</span></span><span class="pill p-plan">PLANNED</span></div>
@@ -120,7 +120,11 @@
     <tr><td class="mono">P02</td><td>17-table metadata model (SQLModel) + Alembic migration (JSONB on PG, UUIDv7, multi-tenant from day one)</td><td>9</td><td><span class="pill p-ok">merged</span></td></tr>
     <tr><td class="mono">P03</td><td>Experiment / variant / metric / layer API + lifecycle state machine + typed errors</td><td>20</td><td><span class="pill p-ok">PR #2</span></td></tr>
     <tr><td class="mono">P04</td><td>Deterministic assignment engine (bucketing, targeting, layers, holdouts, orthogonality) + <code>/v1/assign</code></td><td>39</td><td><span class="pill p-ok">PR #2</span></td></tr>
-    <tr><td class="mono">P05</td><td>Python + TypeScript SDKs with local bucketing matching the server (shared golden fixtures)</td><td>—</td><td><span class="pill p-work">in progress</span></td></tr>
+    <tr><td class="mono">P05</td><td>Python + TypeScript SDKs with local bucketing matching the server (shared golden fixtures)</td><td>28</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P06</td><td>Event ingestion (PII guard, allow-list, idempotent) + DuckDB analytics adapter (sufficient stats)</td><td>51</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P07</td><td>Frequentist stats engine — z/Welch + delta-method lift, SRM, multiple-comparison, power; A/A-calibrated</td><td>65</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P09</td><td>Analysis pipeline + <code>/analyze</code> · <code>/results</code> · <code>/power</code> (SRM-first, correction, persisted)</td><td>69</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">beta</td><td><code>make demo</code> — runs the full flow on in-memory stores; prints a sourced readout (winner + an SRM catch)</td><td>—</td><td><span class="pill p-ok">runnable</span></td></tr>
   </table>
 
   <h2>Why the statistics matter</h2>
@@ -160,14 +164,14 @@
     <div class="card"><h3>Repository &amp; PRs</h3>
       <ul class="tight">
         <li><b>PR #1</b> — plan + P01 + P02 → <b>merged into <code>main</code></b>.</li>
-        <li><b>PR #2</b> — P03 (API + lifecycle) + P04 (assignment) → <b>open</b>, CI green.</li>
-        <li><b>P05</b> (SDKs) in progress on the same branch.</li>
+        <li><b>PR #2</b> — M1 + M2 (P03–P07, P09) + the beta demo → <b>open</b>, CI green.</li>
+        <li>Run it now: <code>make demo</code> (no Postgres/Docker needed).</li>
       </ul></div>
     <div class="card"><h3>Quality gates</h3>
       <ul class="tight">
-        <li>Backend: <b>39 tests</b> passing · <code>ruff</code> · <code>mypy --strict</code> clean.</li>
-        <li>Frontend: <code>lint</code> · <code>vitest</code> · production <code>build</code> green.</li>
-        <li>GitHub Actions CI runs both stacks on every push &amp; PR.</li>
+        <li>Backend: <b>69 tests</b> · <code>ruff</code> · <code>mypy --strict</code> clean.</li>
+        <li>SDKs: Python <b>8</b> + TypeScript <b>20</b> parity/privacy tests.</li>
+        <li>Frontend: <code>lint</code> · <code>vitest</code> · <code>build</code>. CI runs every stack on each push/PR.</li>
       </ul></div>
   </div>
 
