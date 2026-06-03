@@ -20,6 +20,8 @@ from app.stats.power import (
     sample_size_proportion,
 )
 from app.stats.results import EffectResult, MeanArm, ProportionArm, SrmResult
+from app.stats.segments import SegmentBreakdown, SegmentEffect, segment_breakdown_proportions
+from app.stats.sequential import msprt_pvalue
 from app.stats.variance_reduction import cuped, cuped_theta
 
 __all__ = [
@@ -27,6 +29,8 @@ __all__ = [
     "EffectResult",
     "MeanArm",
     "ProportionArm",
+    "SegmentBreakdown",
+    "SegmentEffect",
     "SrmResult",
     "benjamini_hochberg",
     "beta_binomial_compare",
@@ -35,9 +39,11 @@ __all__ = [
     "cuped_theta",
     "holm",
     "mde_proportion",
+    "msprt_pvalue",
     "runtime_days",
     "sample_size_mean",
     "sample_size_proportion",
+    "segment_breakdown_proportions",
     "srm_check",
     "two_proportion_z_test",
     "welch_t_test",
