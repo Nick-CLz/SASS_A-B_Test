@@ -1,0 +1,17 @@
+[project]
+name = "mallard-sdk"
+version = "0.1.0"
+description = "Mallard Python SDK — assignment + event tracking (zero runtime deps)."
+requires-python = ">=3.10"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8.3"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["."]
