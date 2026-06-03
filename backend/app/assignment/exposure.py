@@ -14,6 +14,7 @@ from typing import Protocol
 
 @dataclass(frozen=True)
 class ExposureEvent:
+    workspace_id: str
     experiment_key: str
     variant_key: str
     unit_id: str

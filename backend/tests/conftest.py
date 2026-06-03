@@ -12,6 +12,8 @@ from collections.abc import Iterator
 import pytest
 from alembic import command
 from alembic.config import Config
+from app.analytics import DuckStore
+from app.api.deps import get_store
 from app.core.config import get_settings
 from app.core.db import get_session, make_engine
 from app.main import app
@@ -50,14 +52,25 @@ def session(migrated_engine: Engine) -> Iterator[Session]:
 
 
 @pytest.fixture
-def client(migrated_engine: Engine) -> Iterator[TestClient]:
-    """A TestClient whose DB session is bound to the migrated test database."""
+def store() -> Iterator[DuckStore]:
+    """An isolated in-memory analytics store for a test."""
+    duck = DuckStore(":memory:")
+    try:
+        yield duck
+    finally:
+        duck.close()
+
+
+@pytest.fixture
+def client(migrated_engine: Engine, store: DuckStore) -> Iterator[TestClient]:
+    """A TestClient bound to the migrated DB and the in-memory analytics store."""
 
     def _override_session() -> Iterator[Session]:
         with Session(migrated_engine) as test_session:
             yield test_session
 
     app.dependency_overrides[get_session] = _override_session
+    app.dependency_overrides[get_store] = lambda: store
     yield TestClient(app)
     app.dependency_overrides.clear()
 

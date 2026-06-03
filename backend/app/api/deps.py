@@ -14,9 +14,11 @@ from fastapi import Depends, Header
 from pydantic import BaseModel
 from sqlmodel import Session
 
-from app.assignment.exposure import ExposureSink, NullExposureSink
+from app.analytics import DuckStore, get_store_singleton
+from app.assignment.exposure import ExposureSink
 from app.core.db import get_session
 from app.core.errors import NotFoundError
+from app.ingestion.sink import DuckExposureSink
 from app.models.enums import MembershipRole
 from app.models.org import Workspace
 
@@ -46,12 +48,17 @@ def get_tenant(
 TenantDep = Annotated[TenantContext, Depends(get_tenant)]
 
 
-# Exposure sink: no-op until P06 wires real ingestion; overridable in tests.
-_default_exposure_sink: ExposureSink = NullExposureSink()
+def get_store() -> DuckStore:
+    """The analytics store (DuckDB). Overridden in tests with an in-memory store."""
+    return get_store_singleton()
 
 
-def get_exposure_sink() -> ExposureSink:
-    return _default_exposure_sink
+StoreDep = Annotated[DuckStore, Depends(get_store)]
+
+
+def get_exposure_sink(store: StoreDep) -> ExposureSink:
+    """Persist assignment exposures to the analytics store (P04 → P06 wiring)."""
+    return DuckExposureSink(store)
 
 
 ExposureSinkDep = Annotated[ExposureSink, Depends(get_exposure_sink)]

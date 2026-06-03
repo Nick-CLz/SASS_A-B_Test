@@ -79,5 +79,12 @@ def assign_unit(
     if log_exposure and sink is not None:
         for result in results:
             if result.in_experiment and result.variant_key is not None:
-                sink.log(ExposureEvent(result.experiment_key, result.variant_key, unit_id))
+                sink.log(
+                    ExposureEvent(
+                        workspace_id=str(workspace_id),
+                        experiment_key=result.experiment_key,
+                        variant_key=result.variant_key,
+                        unit_id=unit_id,
+                    )
+                )
     return results
