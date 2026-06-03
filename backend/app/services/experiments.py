@@ -11,6 +11,7 @@ from collections.abc import Sequence
 
 from sqlmodel import Session, select
 
+from app.assignment.cache import invalidate as invalidate_assignment_cache
 from app.core.errors import ConflictError, InvalidTransitionError, InvariantError, NotFoundError
 from app.models.base import utcnow
 from app.models.enums import ExperimentStatus
@@ -181,6 +182,7 @@ def transition_experiment(
     if new_status == ExperimentStatus.concluded:
         exp.end_at = utcnow()
     exp.status = new_status
+    invalidate_assignment_cache(workspace_id)
     return add(session, exp)
 
 

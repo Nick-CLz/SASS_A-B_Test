@@ -99,11 +99,12 @@ Full rationale (and the alternatives considered) is in
 
 ## Status
 
-🏗️ **Planning complete; M0 (scaffold, `P01`) done.** The backend (FastAPI, `GET /v1/health`,
-ruff + mypy + pytest green) and the frontend (Next.js + TS + Tailwind, lint + vitest + build
-green) are scaffolded, with CI wired. Next: `P02` (data model) → `P03` (experiment API) →
-`P04` (assignment). `sdks/` is still a placeholder until `P05`. Nothing computes statistics
-yet — that's `P07`/`P08`. Run `make setup && make test` to verify locally.
+🏗️ **M1 nearly complete.** Done: `P01` scaffold · `P02` data model + migration · `P03`
+experiment/metric/layer API + lifecycle · `P04` deterministic assignment engine + `/v1/assign`
+(with cross-language golden fixtures in `sdks/fixtures/`). Backend is `ruff` + `mypy --strict`
++ `pytest` green (39 tests); frontend lint + vitest + build green; CI wired. Next: `P05`
+(Python + TS SDKs reusing the assignment fixtures), then `P06`/`P07` (ingestion + statistics).
+Run `make setup && make test` to verify locally.
 
 ## License
 

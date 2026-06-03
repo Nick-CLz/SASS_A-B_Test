@@ -14,6 +14,7 @@ from fastapi import Depends, Header
 from pydantic import BaseModel
 from sqlmodel import Session
 
+from app.assignment.exposure import ExposureSink, NullExposureSink
 from app.core.db import get_session
 from app.core.errors import NotFoundError
 from app.models.enums import MembershipRole
@@ -43,3 +44,14 @@ def get_tenant(
 
 
 TenantDep = Annotated[TenantContext, Depends(get_tenant)]
+
+
+# Exposure sink: no-op until P06 wires real ingestion; overridable in tests.
+_default_exposure_sink: ExposureSink = NullExposureSink()
+
+
+def get_exposure_sink() -> ExposureSink:
+    return _default_exposure_sink
+
+
+ExposureSinkDep = Annotated[ExposureSink, Depends(get_exposure_sink)]
