@@ -99,12 +99,23 @@ Full rationale (and the alternatives considered) is in
 
 ## Status
 
-🏗️ **M1 nearly complete.** Done: `P01` scaffold · `P02` data model + migration · `P03`
-experiment/metric/layer API + lifecycle · `P04` deterministic assignment engine + `/v1/assign`
-(with cross-language golden fixtures in `sdks/fixtures/`). Backend is `ruff` + `mypy --strict`
-+ `pytest` green (39 tests); frontend lint + vitest + build green; CI wired. Next: `P05`
-(Python + TS SDKs reusing the assignment fixtures), then `P06`/`P07` (ingestion + statistics).
-Run `make setup && make test` to verify locally.
+✅ **Built and runnable through milestone M7** (everything that doesn't need a model key).
+Done: the core platform (data model · deterministic assignment + `/v1/assign` · Python/TS SDKs
+with cross-language golden-fixture parity), privacy-first ingestion + DuckDB analytics, the full
+**statistics engine** (frequentist + CUPED + sequential + Bayesian + SRM + power), the analysis
+pipeline + REST API, a Next.js **dashboard**, the **grounded AI-agent foundation** (tools + a
+"never invents numbers" check + persisted traces, mock-tested), and **SaaS hardening** (RBAC,
+tenant isolation, audit log, API keys). Backend is `ruff` + `mypy --strict` + `pytest` green
+(**90 tests**); frontend + SDK suites green; CI wired.
+
+**Try it:**
+- `make demo` — the whole pipeline in one command, no setup ([what you'll see](./docs/case-study.md#3-what-the-demo-shows)).
+- **[`docs/USAGE.md`](./docs/USAGE.md)** — drive a real experiment yourself via the API + dashboard.
+- **[`docs/case-study.md`](./docs/case-study.md)** — the senior-DS write-up.
+- `make setup && make test` — verify locally.
+
+**Remaining:** the concrete AI agents (Designer / Monitor / Analyst / Readout) — built on the
+tested foundation; running them live needs `ANTHROPIC_API_KEY`.
 
 ## License
 
