@@ -21,6 +21,7 @@ from app.stats import (
     MeanArm,
     ProportionArm,
     benjamini_hochberg,
+    beta_binomial_compare,
     bonferroni,
     holm,
     srm_check,
@@ -44,6 +45,8 @@ class _Row:
     estimate: float | None
     effect: EffectResult | None  # None for the control arm
     adjusted: tuple[bool, float] | None = None
+    prob_better: float | None = None  # Bayesian P(treatment > control)
+    expected_loss: float | None = None  # Bayesian expected regret of shipping treatment
 
 
 def _event_name(metric: Metric) -> str:
@@ -58,6 +61,7 @@ def analyze_experiment(
     key: str,
     alpha: float = 0.05,
     correction: str = "benjamini_hochberg",
+    bayesian: bool = True,
 ) -> uuid.UUID:
     """Run one analysis and persist an AnalysisRun + MetricResults + SrmCheck."""
     exp = exp_svc.get_experiment(session, workspace_id, key)
@@ -72,7 +76,7 @@ def analyze_experiment(
         experiment_id=exp.id,
         status=AnalysisStatus.complete,
         trigger=AnalysisTrigger.manual,
-        method={"alpha": alpha, "correction": correction},
+        method={"alpha": alpha, "correction": correction, "bayesian": bayesian},
     )
     add(session, run)
 
@@ -94,7 +98,7 @@ def analyze_experiment(
             )
         )
 
-    rows = _compute_rows(store, ws, key, variants, control, session, exp.id, alpha)
+    rows = _compute_rows(store, ws, key, variants, control, session, exp.id, alpha, bayesian)
     _apply_correction(rows, correction, alpha)
     _persist(session, run.id, org_id, rows)
     session.commit()
@@ -110,6 +114,7 @@ def _compute_rows(
     session: Session,
     experiment_id: uuid.UUID,
     alpha: float,
+    bayesian: bool = True,
 ) -> list[_Row]:
     rows: list[_Row] = []
     for link in exp_svc.get_experiment_metrics(session, experiment_id):
@@ -126,7 +131,25 @@ def _compute_rows(
                     rows.append(_Row(metric, variant, n, p_control.rate, None))
                 else:
                     eff = two_proportion_z_test(p_control, ProportionArm(n, s), alpha)
-                    rows.append(_Row(metric, variant, n, eff.estimate, eff))
+                    prob_better: float | None = None
+                    expected_loss: float | None = None
+                    if bayesian:
+                        bayes = beta_binomial_compare(
+                            p_control.n, p_control.successes, n, s, samples=50_000
+                        )
+                        prob_better = bayes.prob_treatment_better
+                        expected_loss = bayes.expected_loss_ship_treatment
+                    rows.append(
+                        _Row(
+                            metric,
+                            variant,
+                            n,
+                            eff.estimate,
+                            eff,
+                            prob_better=prob_better,
+                            expected_loss=expected_loss,
+                        )
+                    )
         else:
             use_value = metric.type == MetricType.mean
             c_arms = store.continuous_stats(ws, key, event, use_value=use_value)
@@ -174,6 +197,8 @@ def _persist(session: Session, run_id: uuid.UUID, org_id: uuid.UUID, rows: list[
                 ci_upper=eff.ci_upper if eff is not None else None,
                 p_value=eff.p_value if eff is not None else None,
                 std_error=eff.std_error if eff is not None else None,
+                prob_to_beat_control=row.prob_better,
+                expected_loss=row.expected_loss,
                 is_significant=is_significant,
                 method_detail=detail,
             )

@@ -63,6 +63,11 @@ def _print_results(session: Session, run_id, exp_key: str, workspace_id) -> None
                 f"      abs effect={mr.abs_effect:+.3%}  rel lift={mr.rel_effect:+.1%}  "
                 f"CI=[{mr.ci_lower:+.3%}, {mr.ci_upper:+.3%}]  p={mr.p_value:.2e}  -> {verdict}"
             )
+            if mr.prob_to_beat_control is not None:
+                print(
+                    f"      Bayesian: P(treatment better)={mr.prob_to_beat_control:.1%}  "
+                    f"expected loss={mr.expected_loss:.5f}"
+                )
 
 
 def _seed_experiment(

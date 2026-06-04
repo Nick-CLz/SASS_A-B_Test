@@ -44,6 +44,8 @@ def _build_run_read(
                 ci_lower=mr.ci_lower,
                 ci_upper=mr.ci_upper,
                 p_value=mr.p_value,
+                prob_to_beat_control=mr.prob_to_beat_control,
+                expected_loss=mr.expected_loss,
                 is_significant=mr.is_significant,
                 method_detail=mr.method_detail,
             )
@@ -75,7 +77,14 @@ def analyze(
     key: str, payload: AnalyzeRequest, session: SessionDep, ctx: TenantDep, store: StoreDep
 ) -> AnalysisRunRead:
     run_id = svc.analyze_experiment(
-        session, store, ctx.org_id, ctx.workspace_id, key, payload.alpha, payload.correction
+        session,
+        store,
+        ctx.org_id,
+        ctx.workspace_id,
+        key,
+        payload.alpha,
+        payload.correction,
+        payload.bayesian,
     )
     exp = exp_svc.get_experiment(session, ctx.workspace_id, key)
     run = session.get(AnalysisRun, run_id)

@@ -62,6 +62,8 @@ def test_analyze_recovers_effect(
     assert treatment["abs_effect"] > 0
     assert treatment["is_significant"]
     assert treatment["rel_effect"] > 0.3  # ~16% vs 10% -> +60% lift
+    assert treatment["prob_to_beat_control"] > 0.99  # Bayesian agrees
+    assert treatment["expected_loss"] < 1e-3
 
     latest = client.get("/v1/experiments/checkout/results", headers=h)
     assert latest.status_code == 200

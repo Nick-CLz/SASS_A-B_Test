@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 class AnalyzeRequest(BaseModel):
     alpha: float = 0.05
     correction: str = "benjamini_hochberg"  # bonferroni | holm | benjamini_hochberg | none
+    bayesian: bool = True  # also compute P(better) + expected loss for proportion metrics
 
 
 class SrmRead(BaseModel):
@@ -33,6 +34,8 @@ class MetricResultRead(BaseModel):
     ci_lower: float | None
     ci_upper: float | None
     p_value: float | None
+    prob_to_beat_control: float | None = None
+    expected_loss: float | None = None
     is_significant: bool
     method_detail: dict[str, Any] = Field(default_factory=dict)
 
