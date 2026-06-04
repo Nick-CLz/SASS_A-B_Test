@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 
-from app.api.deps import SessionDep, StoreDep, TenantDep
+from app.api.deps import SessionDep, StoreDep, TenantDep, require_min_role
 from app.models.analysis import AnalysisRun
+from app.models.enums import MembershipRole
 from app.models.experiment import Metric
 from app.schemas.analysis import (
     AnalysisRunRead,
@@ -72,7 +73,11 @@ def _build_run_read(
     )
 
 
-@router.post("/{key}/analyze", response_model=AnalysisRunRead)
+@router.post(
+    "/{key}/analyze",
+    response_model=AnalysisRunRead,
+    dependencies=[Depends(require_min_role(MembershipRole.analyst))],
+)
 def analyze(
     key: str, payload: AnalyzeRequest, session: SessionDep, ctx: TenantDep, store: StoreDep
 ) -> AnalysisRunRead:
