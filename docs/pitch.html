@@ -52,6 +52,19 @@
   .card .ic{font-size:22px}
   .card h3{margin:8px 0 6px;font-size:17.5px}
   .card p{margin:0;color:var(--muted);font-size:14.5px}
+  /* availability badges */
+  .badge2{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;
+    padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:6px}
+  .b-ok{background:#e6f6ec;color:#0f7a43;border:1px solid #b7e4c7}
+  .b-beta{background:#fff4e5;color:#b45309;border:1px solid #fed7aa}
+  .b-road{background:#eef1f6;color:#5b6b86;border:1px solid #dbe2ec}
+  .legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:-8px auto 26px;font-size:12.5px;color:var(--muted)}
+  .legend i{font-style:normal}
+  .mk{font-size:10px;font-weight:800;letter-spacing:.03em;margin-left:4px}
+  .mk.beta{color:#b45309} .mk.road{color:#9aa6b8}
+  .avail{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:14px;
+    padding:14px 18px;margin:20px auto 0;max-width:760px;font-size:13.5px;text-align:left}
+  .avail b{color:#7c2d12}
   /* agents */
   .agents{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
   .agent{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
@@ -120,7 +133,7 @@
       <span>Grounded AI — agents never invent a number</span>
       <span>SRM + CUPED + sequential + Bayesian</span>
       <span>No PII, ever</span>
-      <span>Self-host option</span>
+      <span>Self-host (beta)</span>
     </div>
   </div>
 </header>
@@ -143,26 +156,33 @@
   <h2>Why Mallard wins</h2>
   <p class="lead">An engine you can trust, with an AI brain on top — and a privacy posture built in,
      not bolted on.</p>
+  <div class="legend">
+    <i><span class="badge2 b-ok">LIVE</span> built &amp; tested</i>
+    <i><span class="badge2 b-beta">BETA</span> foundation shipped; needs a model key</i>
+    <i><span class="badge2 b-road">ROADMAP</span> planned, not yet built</i>
+  </div>
   <div class="grid">
-    <div class="card"><div class="ic">🤖</div><h3>AI agents do the DS workflow</h3>
+    <div class="card"><div class="ic">🤖</div><h3>AI agents do the DS workflow <span class="badge2 b-beta">BETA</span></h3>
       <p>Designer, Monitor, Analyst, and Readout agents operate the platform through audited tools —
          turning a one-paragraph hypothesis into a powered design, and a finished test into a
-         ship / no-ship readout.</p></div>
-    <div class="card"><div class="ic">🔒</div><h3>Grounded — they never invent numbers</h3>
+         ship / no-ship readout. <i>(Grounding foundation shipped; live agents need a model key.)</i></p></div>
+    <div class="card"><div class="ic">🔒</div><h3>Grounded — they never invent numbers <span class="badge2 b-ok">LIVE</span></h3>
       <p>The deterministic engine computes; the agent narrates. Every figure traces to a tool call,
          and the full trace is auditable. The defensible answer to "can I trust an LLM with stats?"</p></div>
-    <div class="card"><div class="ic">📊</div><h3>Statistics most tools get wrong</h3>
+    <div class="card"><div class="ic">📊</div><h3>Statistics most tools get wrong <span class="badge2 b-ok">LIVE</span></h3>
       <p>Delta-method CIs, CUPED variance reduction, always-valid sequential testing (peek anytime),
          Bayesian decisions, SRM, and power — calibrated and validated against scipy/statsmodels.</p></div>
-    <div class="card"><div class="ic">🦆</div><h3>Privacy-first &amp; warehouse-native</h3>
-      <p>Pseudonymous units, a PII guard that rejects emails/IPs before storage, and analytics that
-         run on <i>your</i> warehouse — raw data never leaves your perimeter. De-risks GDPR/CCPA.</p></div>
+    <div class="card"><div class="ic">🦆</div><h3>Privacy-first <span class="badge2 b-ok">LIVE</span> · warehouse-native <span class="badge2 b-road">ROADMAP</span></h3>
+      <p>Pseudonymous units and a PII guard that rejects emails/IPs before storage — that part is
+         live and tested. Analytics run embedded on DuckDB today; warehouse connectors
+         (BigQuery / Snowflake / Databricks) so raw data stays in your perimeter are on the roadmap.</p></div>
   </div>
 </section>
 
 <section class="wrap" style="padding-top:8px">
-  <h2>What the agents do</h2>
-  <p class="lead">Four agents, one loop — humans approve the decisions.</p>
+  <h2>What the agents do <span class="badge2 b-beta">BETA</span></h2>
+  <p class="lead">Four agents, one loop — humans approve the decisions. The grounding foundation is
+     shipped and tested; live agent runs are in beta (they need a model key).</p>
   <div class="agents">
     <div class="agent"><div class="step">DESIGN</div><h4>Designer</h4><p>Hypothesis → OEC, guardrails, variants, and a power-based sample size.</p></div>
     <div class="agent"><div class="step">WATCH</div><h4>Monitor</h4><p>Flags SRM and data-quality issues while the test runs — before they bias the result.</p></div>
@@ -208,9 +228,9 @@
         <div class="who">Unlock the AI agents and advanced stats.</div>
         <ul>
           <li>Everything in Free</li>
-          <li><b>AI agents</b> (metered usage)</li>
+          <li><b>AI agents</b> (metered usage) <span class="mk beta">BETA</span></li>
           <li>CUPED · sequential · Bayesian</li>
-          <li>1 warehouse connector</li>
+          <li>Warehouse connector <span class="mk road">ROADMAP</span></li>
           <li>RBAC + audit · unlimited viewers</li>
         </ul>
         <a class="btn dark" href="#demo">Start a trial</a>
@@ -221,9 +241,9 @@
         <div class="who">Scale with governance and SSO.</div>
         <ul>
           <li>Everything in Team</li>
-          <li>Higher AI-agent quotas</li>
-          <li>Multiple warehouse connectors</li>
-          <li>SSO · audit retention</li>
+          <li>Higher AI-agent quotas <span class="mk beta">BETA</span></li>
+          <li>Multiple warehouse connectors <span class="mk road">ROADMAP</span></li>
+          <li>SSO <span class="mk road">ROADMAP</span> · audit retention</li>
           <li>Priority support + SLA</li>
         </ul>
         <a class="btn dark" href="#demo">Talk to sales</a>
@@ -234,15 +254,19 @@
         <div class="who">Self-host, compliance, and scale.</div>
         <ul>
           <li>Everything in Business</li>
-          <li>Self-host / VPC deploy</li>
-          <li>SAML SSO + SCIM</li>
-          <li>DPA · security review</li>
+          <li>Self-host / VPC deploy <span class="mk road">ROADMAP</span></li>
+          <li>SAML SSO + SCIM <span class="mk road">ROADMAP</span></li>
+          <li>DPA · security review <span class="mk road">ROADMAP</span></li>
           <li>Dedicated CSM · custom models</li>
         </ul>
         <a class="btn dark" href="#demo">Contact us</a>
       </div>
     </div>
-    <p style="text-align:center;color:var(--muted);font-size:12.5px;margin-top:18px">
+    <div class="avail"><b>Availability today:</b> the engine, statistics, privacy guard, dashboard,
+      and RBAC / audit / API-keys are <b>live and tested</b>. AI agents are <b>beta</b> (need a model
+      key); SSO/SCIM, additional warehouse connectors, self-host, and usage-based billing are
+      <b>roadmap</b>. Full map: <code>docs/build-status.md</code>.</div>
+    <p style="text-align:center;color:var(--muted);font-size:12.5px;margin-top:14px">
       Prices illustrative (pricing hypotheses, see <code>docs/11-sales.md</code>). AI-agent usage is
       metered — model routing + prompt caching keep margins healthy.</p>
   </div>
@@ -250,7 +274,8 @@
 
 <section class="wrap">
   <h2>How accounts expand</h2>
-  <p class="lead">Net revenue retention comes from real usage, not lock-in.</p>
+  <p class="lead">Net revenue retention comes from real usage, not lock-in. <span style="font-size:13px">(Several
+     levers below are on the roadmap — see availability above.)</span></p>
   <div class="levers">
     <div class="lever"><b>🔁 AI-agent usage</b><p>Metered by agent runs / tokens — grows as teams analyze more experiments. The primary expansion line.</p></div>
     <div class="lever"><b>👥 Seats</b><p>More editors and analysts as experimentation spreads beyond the core DS team.</p></div>
