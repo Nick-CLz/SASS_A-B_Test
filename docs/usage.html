@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Using Mallard — manual</title>
+<style>
+  :root{
+    --ink:#0f172a; --muted:#64748b; --line:#e5e9f0; --bg:#f6f8fc; --card:#fff;
+    --brand:#5b34c9; --brand2:#2563eb; --codebg:#0f172a; --ok:#0f9d58;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:40px 22px 90px}
+  code,kbd,pre{font-family:"SF Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+  header.top{background:linear-gradient(135deg,#5b34c9,#2563eb);color:#fff;border-radius:18px;
+    padding:30px 30px 26px;box-shadow:0 12px 34px rgba(37,99,235,.22)}
+  header.top h1{margin:0 0 6px;font-size:30px;letter-spacing:-.5px}
+  header.top p{margin:0;opacity:.92;font-size:15.5px;max-width:60ch}
+  .badges{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+  .badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+    border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600}
+  .hero-cmd{margin:22px 0 4px;background:var(--codebg);color:#e2e8f0;border-radius:14px;
+    padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+    box-shadow:0 8px 24px rgba(15,23,42,.18)}
+  .hero-cmd .lhs{display:flex;align-items:center;gap:14px;min-width:0}
+  .hero-cmd .dollar{color:#64748b}
+  .hero-cmd b{color:#fff;font-size:17px}
+  .hero-cmd .sub{display:block;color:#94a3b8;font-size:12.5px;font-weight:400;margin-top:2px}
+  h2{margin:42px 0 4px;font-size:21px;letter-spacing:-.3px;scroll-margin-top:18px}
+  h2 .pre{color:var(--muted);font-weight:700;margin-right:8px}
+  h3{margin:26px 0 8px;font-size:16.5px}
+  .lead{color:var(--muted);margin:6px 0 0}
+  hr{border:0;border-top:1px solid var(--line);margin:30px 0}
+  a{color:var(--brand2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  p{margin:12px 0}
+  nav.toc{margin:22px 0 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+  nav.toc b{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  nav.toc ol{margin:8px 0 0;padding-left:20px;columns:2;column-gap:30px}
+  nav.toc li{margin:3px 0}
+  table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#eef2fb;font-weight:700}
+  tr:last-child td{border-bottom:0}
+  pre{position:relative;background:var(--codebg);color:#e2e8f0;border-radius:12px;
+    padding:16px 16px;overflow:auto;margin:12px 0;font-size:13.3px;line-height:1.6;
+    box-shadow:0 4px 16px rgba(15,23,42,.12);white-space:pre}
+  pre .cmt{color:#7c8aa3}
+  pre b{color:#fff;font-weight:600}
+  p code,li code,td code{background:#eaeefb;color:#3b2a86;padding:1.5px 6px;border-radius:6px;font-size:13px}
+  .copy{position:absolute;top:8px;right:8px;background:#334155;color:#cbd5e1;border:0;
+    border-radius:7px;padding:4px 10px;font-size:11.5px;cursor:pointer;opacity:.85}
+  .copy:hover{opacity:1;background:#475569}
+  .copy.done{background:var(--ok);color:#fff}
+  .step{display:flex;gap:14px;margin:18px 0;align-items:flex-start}
+  .step .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;margin-top:2px}
+  .step .body{flex:1;min-width:0}
+  .step .body h3{margin:2px 0 2px}
+  .role{font-size:11.5px;font-weight:700;color:var(--brand);background:#efeafb;
+    border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:middle}
+  .note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:12px;padding:13px 16px;margin:14px 0;font-size:14.5px}
+  .pill{display:inline-block;background:#eef2fb;border:1px solid var(--line);border-radius:999px;
+    padding:1px 9px;font-size:12px;font-weight:600;color:#334155;margin:0 2px}
+  footer{margin-top:46px;color:var(--muted);font-size:13px;text-align:center}
+  .resp{color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Using Mallard</h1>
+    <p>How to run the platform and drive a real A/B experiment end-to-end — from creating it to
+       reading a statistically sound result.</p>
+    <div class="badges">
+      <span class="badge">Privacy-first</span>
+      <span class="badge">Deterministic assignment</span>
+      <span class="badge">Real statistics + SRM</span>
+      <span class="badge">Grounded AI agents</span>
+    </div>
+  </header>
+
+  <div class="hero-cmd">
+    <div class="lhs">
+      <span class="dollar">$</span>
+      <div><b>make demo</b><span class="sub">If you only do one thing — the whole pipeline in one command, no setup.</span></div>
+    </div>
+    <button class="copy" data-copy="make demo">Copy</button>
+  </div>
+
+  <nav class="toc">
+    <b>On this page</b>
+    <ol>
+      <li><a href="#concepts">Concepts (60 sec)</a></li>
+      <li><a href="#demo">A · The demo (zero setup)</a></li>
+      <li><a href="#live">B · The live API + dashboard</a></li>
+      <li><a href="#admin">Admin: keys, roles, audit</a></li>
+      <li><a href="#sdks">SDKs</a></li>
+      <li><a href="#trouble">Troubleshooting</a></li>
+      <li><a href="#agents">What needs a key</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="concepts">Concepts <span style="font-size:14px;color:var(--muted);font-weight:400">(60 seconds)</span></h2>
+  <table>
+    <tr><th>Term</th><th>What it is</th></tr>
+    <tr><td><b>Organization → Workspace</b></td><td>Tenant boundary. Every request targets one workspace via the <code>X-Workspace-Id</code> header.</td></tr>
+    <tr><td><b>Experiment</b></td><td>A test with a lifecycle: <code>draft → review → running → …</code>. Has <b>variants</b>.</td></tr>
+    <tr><td><b>Variant</b></td><td>One arm (e.g. <code>control</code>, <code>treatment</code>) with an <code>allocation_pct</code>. Exactly one is the control.</td></tr>
+    <tr><td><b>Metric</b></td><td>What you measure (e.g. purchase conversion). The <b>OEC</b> is the primary decision metric.</td></tr>
+    <tr><td><b>Assignment</b></td><td>Which variant a unit (user) gets — a pure, deterministic hash. Same unit → same variant, always.</td></tr>
+    <tr><td><b>Exposure / Event</b></td><td>An exposure = "unit saw the experiment"; an event = something they did (e.g. <code>purchase</code>).</td></tr>
+    <tr><td><b>Analysis</b></td><td>Per-variant rates, lift + confidence interval, p-value, Bayesian P(better), and an <b>SRM</b> data-quality check.</td></tr>
+    <tr><td><b>Roles</b></td><td><span class="pill">viewer</span><span class="pill">analyst</span><span class="pill">editor</span><span class="pill">admin</span><span class="pill">owner</span> — reads open; writes need editor; analyze needs analyst; admin endpoints need admin.</td></tr>
+  </table>
+  <div class="note"><b>Privacy:</b> units are pseudonymous IDs. The ingestion guard <b>rejects PII</b>
+    (emails, phones, IPs) with a reason — it never reaches storage.</div>
+
+  <hr>
+
+  <h2 id="demo"><span class="pre">A.</span>The demo (zero setup)</h2>
+  <p class="lead">See the whole statistics story without configuring anything.</p>
+  <pre><button class="copy" data-copy="make demo">Copy</button>make demo                          <span class="cmt"># or: cd backend &amp;&amp; uv run python -m scripts.demo</span></pre>
+  <p>Runs the full pipeline on in-memory stores. You'll see:</p>
+  <ul>
+    <li>a <b>winning</b> experiment — <code>+33%</code> relative lift, 95% CI, <code>p ≈ 5e-14</code>, <b>SIGNIFICANT</b>, plus Bayesian P(better);</li>
+    <li>a <b>broken</b> experiment — caught by <b>SRM</b> (χ² ≈ 1143) → <i>"results NOT trustworthy"</i>;</li>
+    <li>a <b>power</b> calculation (sample size for a target effect).</li>
+  </ul>
+  <p>Every number is computed by the deterministic stats engine — none is invented.</p>
+
+  <hr>
+
+  <h2 id="live"><span class="pre">B.</span>The live API + dashboard</h2>
+
+  <h3>1 · Start the API and seed a workspace</h3>
+  <p>Use a file-backed SQLite DB so the seed and the server share data (no Postgres needed):</p>
+  <pre><button class="copy" data-copy="cd backend
+export DATABASE_URL=sqlite:///./mallard.db
+uv run python -m scripts.seed
+uv run uvicorn app.main:app --reload">Copy</button>cd backend
+export DATABASE_URL=sqlite:///./mallard.db
+
+uv run python -m scripts.seed            <span class="cmt"># prints: export WS=…  export KEY=…</span>
+uv run uvicorn app.main:app --reload     <span class="cmt"># API on http://localhost:8000 (docs at /docs)</span></pre>
+  <p>Copy the two <code>export</code> lines the seed prints into your shell:</p>
+  <pre><button class="copy" data-copy="export WS=&lt;workspace-id-from-seed&gt;
+export KEY=&lt;api-key-from-seed&gt;">Copy</button>export WS=<b>&lt;workspace-id-from-seed&gt;</b>
+export KEY=<b>&lt;api-key-from-seed&gt;</b>          <span class="cmt"># admin key → sets your role to admin</span></pre>
+  <div class="note"><b>Auth:</b> every request sends <code>X-Workspace-Id: $WS</code>. For writes, also
+    send <code>X-Api-Key: $KEY</code>. (For quick local tinkering you can instead send
+    <code>X-Role: editor</code> — the dev header — but the API key is the real path.)</div>
+
+  <div class="step"><div class="n">2</div><div class="body">
+    <h3>Create an experiment <span class="role">editor+</span></h3>
+    <pre><button class="copy" data-copy="curl -s -X POST localhost:8000/v1/experiments \
+  -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot; -H 'Content-Type: application/json' \
+  -d '{&quot;key&quot;:&quot;checkout_v2&quot;,&quot;name&quot;:&quot;New checkout&quot;,&quot;hypothesis&quot;:&quot;A cleaner checkout lifts purchase conversion.&quot;,&quot;variants&quot;:[{&quot;key&quot;:&quot;control&quot;,&quot;is_control&quot;:true,&quot;allocation_pct&quot;:50},{&quot;key&quot;:&quot;treatment&quot;,&quot;allocation_pct&quot;:50}]}'">Copy</button>curl -s -X POST localhost:8000/v1/experiments \
+  -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY" -H 'Content-Type: application/json' \
+  -d '{"key":"checkout_v2","name":"New checkout",
+       "hypothesis":"A cleaner checkout lifts purchase conversion.",
+       "variants":[{"key":"control","is_control":true,"allocation_pct":50},
+                   {"key":"treatment","allocation_pct":50}]}'</pre>
+  </div></div>
+
+  <div class="step"><div class="n">3</div><div class="body">
+    <h3>Attach the primary metric <span class="role">editor+</span></h3>
+    <p>The seed created a <code>conv</code> metric (purchase conversion). Attach it as the OEC — use the
+       <code>conv</code> id the seed printed:</p>
+    <pre><button class="copy" data-copy="curl -s -X POST localhost:8000/v1/experiments/checkout_v2/metrics \
+  -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot; -H 'Content-Type: application/json' \
+  -d '{&quot;metric_id&quot;:&quot;&lt;CONV_METRIC_ID&gt;&quot;,&quot;role&quot;:&quot;primary&quot;,&quot;is_oec&quot;:true,&quot;min_detectable_effect&quot;:0.02}'">Copy</button>curl -s -X POST localhost:8000/v1/experiments/checkout_v2/metrics \
+  -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY" -H 'Content-Type: application/json' \
+  -d '{"metric_id":"<b>&lt;CONV_METRIC_ID&gt;</b>","role":"primary","is_oec":true,"min_detectable_effect":0.02}'</pre>
+  </div></div>
+
+  <div class="step"><div class="n">4</div><div class="body">
+    <h3>Launch it <span class="role">editor+</span></h3>
+    <pre><button class="copy" data-copy="curl -s -X POST localhost:8000/v1/experiments/checkout_v2/transition \
+  -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot; -H 'Content-Type: application/json' -d '{&quot;status&quot;:&quot;review&quot;}'
+curl -s -X POST localhost:8000/v1/experiments/checkout_v2/transition \
+  -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot; -H 'Content-Type: application/json' -d '{&quot;status&quot;:&quot;running&quot;}'">Copy</button>curl -s -X POST localhost:8000/v1/experiments/checkout_v2/transition \
+  -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY" -H 'Content-Type: application/json' -d '{"status":"review"}'
+curl -s -X POST localhost:8000/v1/experiments/checkout_v2/transition \
+  -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY" -H 'Content-Type: application/json' -d '{"status":"running"}'</pre>
+  </div></div>
+
+  <div class="step"><div class="n">5</div><div class="body">
+    <h3>Assign a unit</h3>
+    <pre><button class="copy" data-copy="curl -s -X POST localhost:8000/v1/assign \
+  -H &quot;X-Workspace-Id: $WS&quot; -H 'Content-Type: application/json' \
+  -d '{&quot;unit_id&quot;:&quot;user-123&quot;,&quot;experiment_key&quot;:&quot;checkout_v2&quot;}'">Copy</button>curl -s -X POST localhost:8000/v1/assign \
+  -H "X-Workspace-Id: $WS" -H 'Content-Type: application/json' \
+  -d '{"unit_id":"user-123","experiment_key":"checkout_v2"}'
+<span class="resp">→ {"assignments":[{"experiment_key":"checkout_v2","eligible":true,
+                  "in_experiment":true,"variant_key":"treatment","reason":"assigned"}]}</span></pre>
+    <p><code>/assign</code> is deterministic (same <code>unit_id</code> → same variant) <b>and it records the exposure for you</b>.</p>
+  </div></div>
+
+  <div class="step"><div class="n">6</div><div class="body">
+    <h3>Send a conversion event</h3>
+    <pre><button class="copy" data-copy="curl -s -X POST localhost:8000/v1/events \
+  -H &quot;X-Workspace-Id: $WS&quot; -H 'Content-Type: application/json' \
+  -d '{&quot;events&quot;:[{&quot;unit_id&quot;:&quot;user-123&quot;,&quot;name&quot;:&quot;purchase&quot;,&quot;value&quot;:42.0}]}'">Copy</button>curl -s -X POST localhost:8000/v1/events \
+  -H "X-Workspace-Id: $WS" -H 'Content-Type: application/json' \
+  -d '{"events":[{"unit_id":"user-123","name":"purchase","value":42.0}]}'
+<span class="resp">→ {"accepted":1,"rejected":[]}   # PII / non-allow-listed events come back in "rejected"</span></pre>
+    <div class="note"><b>Need significance?</b> One user won't move a p-value. For meaningful numbers,
+      drive a few thousand units (there's a ready loop in <code>docs/USAGE.md</code> §6) or just run
+      <code>make demo</code>, which seeds 20k.</div>
+  </div></div>
+
+  <div class="step"><div class="n">7</div><div class="body">
+    <h3>Analyze + read results <span class="role">analyst+</span></h3>
+    <pre><button class="copy" data-copy="curl -s -X POST localhost:8000/v1/experiments/checkout_v2/analyze \
+  -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot; -H 'Content-Type: application/json' \
+  -d '{&quot;alpha&quot;:0.05,&quot;correction&quot;:&quot;benjamini_hochberg&quot;,&quot;bayesian&quot;:true}'">Copy</button>curl -s -X POST localhost:8000/v1/experiments/checkout_v2/analyze \
+  -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY" -H 'Content-Type: application/json' \
+  -d '{"alpha":0.05,"correction":"benjamini_hochberg","bayesian":true}'</pre>
+    <p>The response (and <code>GET /v1/experiments/checkout_v2/results</code>) includes:</p>
+    <ul>
+      <li><code>srm</code> — the sample-ratio check (<b>look here first</b>; if <code>is_mismatch</code> is true, don't trust the rest);</li>
+      <li><code>results[]</code> — per variant: <code>estimate</code>, <code>abs_effect</code>, <code>rel_effect</code>,
+          <code>ci_lower/ci_upper</code>, <code>p_value</code>, <code>is_significant</code>, and (for proportions)
+          <code>prob_to_beat_control</code> + <code>expected_loss</code>.</li>
+    </ul>
+  </div></div>
+
+  <div class="step"><div class="n">8</div><div class="body">
+    <h3>Plan a future test (power)</h3>
+    <pre><button class="copy" data-copy="curl -s &quot;localhost:8000/v1/experiments/checkout_v2/power?baseline=0.10&amp;mde=0.02&amp;daily_traffic=2000&quot; \
+  -H &quot;X-Workspace-Id: $WS&quot;">Copy</button>curl -s "localhost:8000/v1/experiments/checkout_v2/power?baseline=0.10&amp;mde=0.02&amp;daily_traffic=2000" \
+  -H "X-Workspace-Id: $WS"
+<span class="resp">→ sample_size_per_arm, total_sample_size, runtime_days</span></pre>
+  </div></div>
+
+  <h3>The dashboard</h3>
+  <pre><button class="copy" data-copy="cd frontend &amp;&amp; pnpm dev">Copy</button>cd frontend &amp;&amp; pnpm dev          <span class="cmt"># http://localhost:3000</span></pre>
+  <p>Set <code>NEXT_PUBLIC_API_BASE_URL</code> (API URL) and <code>NEXT_PUBLIC_WORKSPACE_ID=$WS</code>.
+     You get the experiment list and a results view that leads with the confidence interval and shows a
+     loud banner when SRM fails.</p>
+
+  <hr>
+
+  <h2 id="admin">Admin: API keys, roles, audit</h2>
+  <pre><button class="copy" data-copy="# create another key (admin)
+curl -s -X POST localhost:8000/v1/api-keys -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot; \
+  -H 'Content-Type: application/json' -d '{&quot;name&quot;:&quot;sdk&quot;,&quot;scopes&quot;:[&quot;assign&quot;,&quot;track&quot;]}'
+# list keys (secrets are never returned again)
+curl -s localhost:8000/v1/api-keys -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot;
+# audit trail of sensitive actions (admin)
+curl -s localhost:8000/v1/audit -H &quot;X-Workspace-Id: $WS&quot; -H &quot;X-Api-Key: $KEY&quot;">Copy</button><span class="cmt"># create another key (admin)</span>
+curl -s -X POST localhost:8000/v1/api-keys -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY" \
+  -H 'Content-Type: application/json' -d '{"name":"sdk","scopes":["assign","track"]}'
+<span class="cmt"># list keys (secrets are never returned again)</span>
+curl -s localhost:8000/v1/api-keys -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY"
+<span class="cmt"># audit trail of sensitive actions (admin)</span>
+curl -s localhost:8000/v1/audit   -H "X-Workspace-Id: $WS" -H "X-Api-Key: $KEY"</pre>
+  <p>A key's scopes set its role: <code>admin</code> scope → admin; otherwise editor (can assign/track/create).
+     A <code>viewer</code>/<code>analyst</code> gets <b>403</b> on writes — that's the RBAC working.</p>
+
+  <hr>
+
+  <h2 id="sdks">SDKs (in app code instead of curl)</h2>
+  <p><code>sdks/python</code> and <code>sdks/typescript</code> wrap <code>/assign</code> + <code>/events</code> with the
+     <i>same</i> deterministic bucketing as the server (pinned by shared golden fixtures), so client-side
+     assignment matches the backend exactly. See each SDK's README.</p>
+
+  <hr>
+
+  <h2 id="trouble">Troubleshooting</h2>
+  <table>
+    <tr><th>Symptom</th><th>Fix</th></tr>
+    <tr><td><b>404</b> "workspace not found"</td><td><code>X-Workspace-Id</code> is wrong, or you seeded a different DB. Re-run <code>scripts.seed</code> with the same <code>DATABASE_URL</code> the server uses.</td></tr>
+    <tr><td><b>403</b> forbidden</td><td>Your role is too low; send the admin <code>X-Api-Key</code> (or <code>X-Role: editor</code>).</td></tr>
+    <tr><td>event in <code>rejected</code></td><td>It tripped the PII guard or a workspace allow-list. The <code>reason</code> says which.</td></tr>
+    <tr><td>results look flat / not significant</td><td>You need volume — run the traffic loop (USAGE.md §6) or <code>make demo</code>.</td></tr>
+  </table>
+
+  <hr>
+
+  <h2 id="agents">What needs a key</h2>
+  <p>The AI agents (design / monitor / analyze / write-up) call this same engine through audited tools.
+     The foundation + grounding ("never invents numbers") are built and tested; running the agents <i>live</i>
+     needs <code>ANTHROPIC_API_KEY</code> set in the environment. Full plan: <code>docs/05-ai-agents.md</code>.</p>
+
+  <footer>Mallard · source manual: <code>docs/USAGE.md</code> · <code>make demo</code> to see it all run.</footer>
+</div>
+
+<script>
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = btn.getAttribute('data-copy') || '';
+      navigator.clipboard.writeText(text).then(function(){
+        var old = btn.textContent;
+        btn.textContent = 'Copied ✓'; btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>

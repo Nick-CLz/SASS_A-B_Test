@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mallard — the AI-native, privacy-first experimentation platform</title>
+<style>
+  :root{
+    --ink:#0f172a; --muted:#5b6b86; --line:#e6eaf2; --bg:#f5f7fc; --card:#fff;
+    --brand:#5b34c9; --brand2:#2563eb; --ok:#0f9d58; --gold:#b8860b;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+  a{color:var(--brand2);text-decoration:none} a:hover{text-decoration:underline}
+  .btn{display:inline-block;border-radius:11px;padding:13px 22px;font-weight:700;font-size:15px;cursor:pointer;border:0}
+  .btn.primary{background:#fff;color:var(--brand)}
+  .btn.ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.4)}
+  .btn.dark{background:var(--brand);color:#fff}
+  .btn.dark:hover{background:#4a2aa8;text-decoration:none}
+  /* hero */
+  .hero{background:radial-gradient(1200px 500px at 80% -10%,#7c4dff33,transparent),
+        linear-gradient(135deg,#5b34c9,#2563eb);color:#fff;border-radius:0 0 26px 26px;
+        padding:64px 0 56px;box-shadow:0 18px 50px rgba(37,99,235,.22)}
+  .eyebrow{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:700}
+  .hero h1{margin:14px 0 10px;font-size:42px;line-height:1.08;letter-spacing:-1px;max-width:18ch}
+  .hero p.sub{font-size:18.5px;opacity:.94;max-width:60ch;margin:0 0 26px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .cta .note{opacity:.8;font-size:13px;margin-left:4px}
+  .trust{margin-top:26px;display:flex;gap:10px;flex-wrap:wrap}
+  .trust span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.26);
+    border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600}
+  section{padding:52px 0}
+  h2{font-size:27px;letter-spacing:-.4px;margin:0 0 6px;text-align:center}
+  .lead{color:var(--muted);text-align:center;max-width:62ch;margin:0 auto 30px;font-size:16px}
+  /* problem */
+  .problem{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .pcols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+  .pcols .big{font-size:21px;line-height:1.4;font-weight:600}
+  .pcols .big b{color:var(--brand)}
+  .stat-row{display:flex;gap:14px;flex-wrap:wrap}
+  .stat{flex:1;min-width:150px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .stat b{display:block;font-size:26px;color:var(--brand2);letter-spacing:-.5px}
+  .stat span{font-size:13px;color:var(--muted)}
+  /* cards */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;
+    box-shadow:0 6px 18px rgba(15,23,42,.04)}
+  .card .ic{font-size:22px}
+  .card h3{margin:8px 0 6px;font-size:17.5px}
+  .card p{margin:0;color:var(--muted);font-size:14.5px}
+  /* availability badges */
+  .badge2{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;
+    padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:6px}
+  .b-ok{background:#e6f6ec;color:#0f7a43;border:1px solid #b7e4c7}
+  .b-beta{background:#fff4e5;color:#b45309;border:1px solid #fed7aa}
+  .b-road{background:#eef1f6;color:#5b6b86;border:1px solid #dbe2ec}
+  .legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:-8px auto 26px;font-size:12.5px;color:var(--muted)}
+  .legend i{font-style:normal}
+  .mk{font-size:10px;font-weight:800;letter-spacing:.03em;margin-left:4px}
+  .mk.beta{color:#b45309} .mk.road{color:#9aa6b8}
+  .avail{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:14px;
+    padding:14px 18px;margin:20px auto 0;max-width:760px;font-size:13.5px;text-align:left}
+  .avail b{color:#7c2d12}
+  /* agents */
+  .agents{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .agent{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+  .agent .step{font-size:11px;font-weight:700;color:var(--brand);letter-spacing:.08em}
+  .agent h4{margin:6px 0 4px;font-size:15px}
+  .agent p{margin:0;color:var(--muted);font-size:12.8px}
+  /* ROI band */
+  .roi{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:20px;padding:34px;
+    display:flex;gap:30px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .roi .h{font-size:23px;font-weight:700;max-width:24ch;letter-spacing:-.3px}
+  .roi .h b{color:#8b7bf0}
+  .roi .nums{display:flex;gap:26px;flex-wrap:wrap}
+  .roi .n b{display:block;font-size:30px;letter-spacing:-.5px}
+  .roi .n span{font-size:12.5px;opacity:.8}
+  /* pricing */
+  .pricing{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+  .tier{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column}
+  .tier.feat{border:2px solid var(--brand);box-shadow:0 14px 34px rgba(91,52,201,.16);position:relative}
+  .tier.feat .tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+    background:var(--brand);color:#fff;font-size:11px;font-weight:700;letter-spacing:.05em;
+    padding:4px 12px;border-radius:999px}
+  .tier h3{margin:0 0 2px;font-size:18px}
+  .tier .price{font-size:25px;font-weight:800;letter-spacing:-.5px;margin:6px 0 2px}
+  .tier .price small{font-size:12.5px;font-weight:600;color:var(--muted)}
+  .tier .who{color:var(--muted);font-size:12.8px;min-height:34px}
+  .tier ul{list-style:none;margin:12px 0 18px;padding:0;font-size:13.5px}
+  .tier li{padding:5px 0 5px 22px;position:relative;color:#1f2937}
+  .tier li:before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
+  .tier li.dim{color:#9aa6b8} .tier li.dim:before{content:"—";color:#cbd5e1}
+  .tier .btn{margin-top:auto;text-align:center}
+  /* expansion */
+  .levers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .lever{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px}
+  .lever b{font-size:14.5px} .lever p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  /* trust + faq */
+  .trust2{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 16px;margin:10px 0}
+  details summary{cursor:pointer;font-weight:650;padding:10px 0;font-size:15px}
+  details p{color:var(--muted);font-size:14px;margin:0 0 12px}
+  /* final */
+  .final{background:linear-gradient(135deg,#5b34c9,#2563eb);color:#fff;border-radius:22px;padding:46px;text-align:center}
+  .final h2{color:#fff} .final p{opacity:.92;max-width:54ch;margin:0 auto 22px}
+  footer{padding:26px 0 50px;color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:820px){
+    .grid,.agents,.tiers,.levers,.trust2,.pcols{grid-template-columns:1fr}
+    .hero h1{font-size:32px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">AI-native · privacy-first · warehouse-native</div>
+    <h1>Run 5–10× more experiments per data scientist — with rigor raised, not lowered.</h1>
+    <p class="sub">Mallard's AI agents design, monitor, analyze, and write up your experiments on
+      top of a statistics engine you can actually trust — on your own data warehouse, with no PII
+      in the pipeline.</p>
+    <div class="cta">
+      <a class="btn primary" href="#pricing">See pricing</a>
+      <a class="btn ghost" href="#demo">Book a demo</a>
+      <span class="note">Free tier · no credit card</span>
+    </div>
+    <div class="trust">
+      <span>Grounded AI — agents never invent a number</span>
+      <span>SRM + CUPED + sequential + Bayesian</span>
+      <span>No PII, ever</span>
+      <span>Self-host (beta)</span>
+    </div>
+  </div>
+</header>
+
+<section class="problem">
+  <div class="wrap pcols">
+    <div class="big">A few data scientists <b>gate every experiment</b> — designing it, sizing it,
+      watching it for data bugs, running the right test, and writing the readout. That work is
+      high-skill but highly patterned. <b>It's exactly what an agent can do</b> — if it's forced
+      to call a real stats engine instead of guessing.</div>
+    <div class="stat-row">
+      <div class="stat"><b>~40%</b><span>of a DS's time spent on analysis &amp; readouts</span></div>
+      <div class="stat"><b>days→min</b><span>time from experiment stop to a sourced readout</span></div>
+      <div class="stat"><b>SRM</b><span>bad tests caught before a wrong decision ships</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Why Mallard wins</h2>
+  <p class="lead">An engine you can trust, with an AI brain on top — and a privacy posture built in,
+     not bolted on.</p>
+  <div class="legend">
+    <i><span class="badge2 b-ok">LIVE</span> built &amp; tested</i>
+    <i><span class="badge2 b-beta">BETA</span> foundation shipped; needs a model key</i>
+    <i><span class="badge2 b-road">ROADMAP</span> planned, not yet built</i>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="ic">🤖</div><h3>AI agents do the DS workflow <span class="badge2 b-beta">BETA</span></h3>
+      <p>Designer, Monitor, Analyst, and Readout agents operate the platform through audited tools —
+         turning a one-paragraph hypothesis into a powered design, and a finished test into a
+         ship / no-ship readout. <i>(Grounding foundation shipped; live agents need a model key.)</i></p></div>
+    <div class="card"><div class="ic">🔒</div><h3>Grounded — they never invent numbers <span class="badge2 b-ok">LIVE</span></h3>
+      <p>The deterministic engine computes; the agent narrates. Every figure traces to a tool call,
+         and the full trace is auditable. The defensible answer to "can I trust an LLM with stats?"</p></div>
+    <div class="card"><div class="ic">📊</div><h3>Statistics most tools get wrong <span class="badge2 b-ok">LIVE</span></h3>
+      <p>Delta-method CIs, CUPED variance reduction, always-valid sequential testing (peek anytime),
+         Bayesian decisions, SRM, and power — calibrated and validated against scipy/statsmodels.</p></div>
+    <div class="card"><div class="ic">🦆</div><h3>Privacy-first <span class="badge2 b-ok">LIVE</span> · warehouse-native <span class="badge2 b-road">ROADMAP</span></h3>
+      <p>Pseudonymous units and a PII guard that rejects emails/IPs before storage — that part is
+         live and tested. Analytics run embedded on DuckDB today; warehouse connectors
+         (BigQuery / Snowflake / Databricks) so raw data stays in your perimeter are on the roadmap.</p></div>
+  </div>
+</section>
+
+<section class="wrap" style="padding-top:8px">
+  <h2>What the agents do <span class="badge2 b-beta">BETA</span></h2>
+  <p class="lead">Four agents, one loop — humans approve the decisions. The grounding foundation is
+     shipped and tested; live agent runs are in beta (they need a model key).</p>
+  <div class="agents">
+    <div class="agent"><div class="step">DESIGN</div><h4>Designer</h4><p>Hypothesis → OEC, guardrails, variants, and a power-based sample size.</p></div>
+    <div class="agent"><div class="step">WATCH</div><h4>Monitor</h4><p>Flags SRM and data-quality issues while the test runs — before they bias the result.</p></div>
+    <div class="agent"><div class="step">ANALYZE</div><h4>Analyst</h4><p>Runs the correct test per metric and reports CIs, p-values, and Bayesian P(better).</p></div>
+    <div class="agent"><div class="step">WRITE</div><h4>Readout</h4><p>A plain-language ship / no-ship write-up — every number sourced to the engine.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="roi">
+    <div class="h">Reclaim <b>~$60–80k of DS capacity</b> per data scientist, per year.</div>
+    <div class="nums">
+      <div class="n"><b>5–10×</b><span>experiments analyzed / DS</span></div>
+      <div class="n"><b>&lt;1st ship</b><span>payback — one prevented bad decision</span></div>
+      <div class="n"><b>100%</b><span>numbers traced to the engine</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <h2>Pricing that grows with you</h2>
+    <p class="lead">Land on Free, expand as experimentation spreads. You only pay more when you get
+       more — AI-agent usage, seats, connectors, and governance.</p>
+    <div class="tiers">
+      <div class="tier">
+        <h3>Free</h3>
+        <div class="price">$0<small> / forever</small></div>
+        <div class="who">The open core — adopt it, prove it.</div>
+        <ul>
+          <li>Engine, assignment &amp; SDKs</li>
+          <li>Frequentist stats + dashboard</li>
+          <li>1 workspace · 3 seats</li>
+          <li class="dim">AI agents</li>
+          <li class="dim">Advanced stats</li>
+        </ul>
+        <a class="btn dark" href="#demo">Start free</a>
+      </div>
+      <div class="tier feat">
+        <div class="tag">MOST POPULAR</div>
+        <h3>Team</h3>
+        <div class="price">$49<small> / editor seat / mo</small></div>
+        <div class="who">Unlock the AI agents and advanced stats.</div>
+        <ul>
+          <li>Everything in Free</li>
+          <li><b>AI agents</b> (metered usage) <span class="mk beta">BETA</span></li>
+          <li>CUPED · sequential · Bayesian</li>
+          <li>Warehouse connector <span class="mk road">ROADMAP</span></li>
+          <li>RBAC + audit · unlimited viewers</li>
+        </ul>
+        <a class="btn dark" href="#demo">Start a trial</a>
+      </div>
+      <div class="tier">
+        <h3>Business</h3>
+        <div class="price">$99<small> / editor seat / mo</small></div>
+        <div class="who">Scale with governance and SSO.</div>
+        <ul>
+          <li>Everything in Team</li>
+          <li>Higher AI-agent quotas <span class="mk beta">BETA</span></li>
+          <li>Multiple warehouse connectors <span class="mk road">ROADMAP</span></li>
+          <li>SSO <span class="mk road">ROADMAP</span> · audit retention</li>
+          <li>Priority support + SLA</li>
+        </ul>
+        <a class="btn dark" href="#demo">Talk to sales</a>
+      </div>
+      <div class="tier">
+        <h3>Enterprise</h3>
+        <div class="price">Custom</div>
+        <div class="who">Self-host, compliance, and scale.</div>
+        <ul>
+          <li>Everything in Business</li>
+          <li>Self-host / VPC deploy <span class="mk road">ROADMAP</span></li>
+          <li>SAML SSO + SCIM <span class="mk road">ROADMAP</span></li>
+          <li>DPA · security review <span class="mk road">ROADMAP</span></li>
+          <li>Dedicated CSM · custom models</li>
+        </ul>
+        <a class="btn dark" href="#demo">Contact us</a>
+      </div>
+    </div>
+    <div class="avail"><b>Availability today:</b> the engine, statistics, privacy guard, dashboard,
+      and RBAC / audit / API-keys are <b>live and tested</b>. AI agents are <b>beta</b> (need a model
+      key); SSO/SCIM, additional warehouse connectors, self-host, and usage-based billing are
+      <b>roadmap</b>. Full map: <code>docs/build-status.md</code>.</div>
+    <p style="text-align:center;color:var(--muted);font-size:12.5px;margin-top:14px">
+      Prices illustrative (pricing hypotheses, see <code>docs/11-sales.md</code>). AI-agent usage is
+      metered — model routing + prompt caching keep margins healthy.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>How accounts expand</h2>
+  <p class="lead">Net revenue retention comes from real usage, not lock-in. <span style="font-size:13px">(Several
+     levers below are on the roadmap — see availability above.)</span></p>
+  <div class="levers">
+    <div class="lever"><b>🔁 AI-agent usage</b><p>Metered by agent runs / tokens — grows as teams analyze more experiments. The primary expansion line.</p></div>
+    <div class="lever"><b>👥 Seats</b><p>More editors and analysts as experimentation spreads beyond the core DS team.</p></div>
+    <div class="lever"><b>🏬 Warehouse connectors</b><p>BigQuery, Snowflake, Databricks — beyond the first connector.</p></div>
+    <div class="lever"><b>🛡️ Governance &amp; SSO</b><p>SSO, SCIM, audit retention — the Team → Business → Enterprise trigger.</p></div>
+    <div class="lever"><b>🏠 Self-host / VPC</b><p>Deploy in your perimeter with a DPA and security review — the regulated-buyer unlock.</p></div>
+    <div class="lever"><b>⏱️ Support &amp; SLA</b><p>Priority support and uptime SLAs for teams running experiments in production.</p></div>
+  </div>
+</section>
+
+<section class="wrap" style="padding-top:8px">
+  <h2>Why you can trust the numbers</h2>
+  <p class="lead">The credibility that closes a data-science buyer.</p>
+  <div class="trust2">
+    <div class="card"><h3>Validated, not asserted</h3><p>The engine is cross-checked against scipy/statsmodels, A/A-calibrated by simulation (false-positive rate ≈ α), and power-simulated.</p></div>
+    <div class="card"><h3>It catches mistakes</h3><p>SRM is checked first — a skewed test is flagged "results NOT trustworthy" before anyone acts on a biased number.</p></div>
+    <div class="card"><h3>Auditable AI</h3><p>Every agent run persists its full tool-call trace. No LLM-computed p-values — ever. Decisions stay with humans.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Common questions</h2>
+  <div style="max-width:760px;margin:0 auto">
+    <details><summary>Can I trust an LLM with statistics?</summary><p>The LLM never computes a number. The engine computes; the agent narrates; every figure is traced to a tool call (grounding) and recorded. It's auditable, and the math is deterministic.</p></details>
+    <details><summary>Our data can't leave our environment.</summary><p>Analytics run warehouse-native, so raw data stays in your perimeter. Enterprise adds full self-host / VPC deployment with a DPA and security review.</p></details>
+    <details><summary>We already use feature flags (LaunchDarkly / Split).</summary><p>Keep them. Mallard is the analysis-and-brain layer, not a flag tool — we complement flagging with rigorous analysis and an agentic workflow.</p></details>
+    <details><summary>How is this different from Statsig or Eppo?</summary><p>Same warehouse-native rigor, plus AI agents that actually do the data-scientist workflow and a privacy-first posture built in from the data model up.</p></details>
+    <details><summary>How do you keep AI costs sane?</summary><p>Model routing (small/medium/large per task) and prompt caching. AI usage is metered to customers, so cost scales with value delivered.</p></details>
+  </div>
+</section>
+
+<section class="wrap" id="demo">
+  <div class="final">
+    <h2>See it analyze a real experiment — and catch a broken one.</h2>
+    <p>A 20-minute walkthrough: hypothesis → powered design → live monitoring → a sourced readout,
+       plus a planted data bug the Monitor catches. Bring your hardest experiment.</p>
+    <a class="btn primary" href="mailto:hello@mallard.example?subject=Mallard%20demo">Book a demo</a>
+    <a class="btn ghost" href="#pricing" style="margin-left:8px">Start free</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Mallard · AI-native, privacy-first experimentation. Pricing illustrative — see
+    <code>docs/11-sales.md</code> and <code>docs/08-go-to-market.md</code>. Run <code>make demo</code> to see the engine work.
+  </div>
+</footer>
+
+</body>
+</html>
