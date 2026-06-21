@@ -23,7 +23,8 @@ source of truth the sales materials must not contradict.
 | "Runs on **your warehouse**" (BigQuery / Snowflake / Databricks) | 🗺️ Roadmap | Only DuckDB is implemented. Warehouse names exist as enum values; **no connector code.** Designed as an adapter swap. |
 | Self-host / VPC deploy | 🟡 Beta | Deployable via Docker/compose + `deploy.md`. "VPC / DPA / security review" are process, not code. |
 | **SSO / SAML / SCIM** | 🗺️ Roadmap | Not in the codebase. Auth today = API keys + dev role header. |
-| **Billing / usage metering** (AI runs, seats) | 🗺️ Roadmap | No Stripe, no metering. Tier prices are illustrative hypotheses. |
+| **Usage metering** (AI agent runs + tokens, analyses; `GET /v1/usage`) | ✅ Live | Per-org aggregation from the trace tables; admin-gated; tested. |
+| Billing provider (Stripe) on top of metering | 🗺️ Roadmap | Metering is done; invoicing/charging is not. Tier prices are illustrative. |
 | Additional warehouse connectors | 🗺️ Roadmap | Only DuckDB today. |
 
 ## What each gap takes to close
@@ -32,8 +33,8 @@ source of truth the sales materials must not contradict.
 - **Warehouse connector (Roadmap → Beta):** implement the `AnalyticsBackend` adapter interface
   against the existing sufficient-statistics queries; add one connector (e.g. BigQuery). Medium.
 - **SSO/SCIM (Roadmap):** add an OIDC/SAML provider behind the pluggable auth in `deps.py`. Medium.
-- **Billing/metering (Roadmap):** count agent runs / events per workspace, expose usage, integrate
-  a billing provider. Medium.
+- **Billing (Roadmap, on top of metering):** usage metering is live (`GET /v1/usage`); add a
+  billing provider (Stripe) to invoice against it. Medium.
 
 ## Rule
 The pitch may show **vision**, but anything presented as *available in a tier* must be ✅ Live here,
