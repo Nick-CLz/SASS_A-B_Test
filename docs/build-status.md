@@ -22,7 +22,7 @@ source of truth the sales materials must not contradict.
 | **AI agents** (Designer / Monitor / Analyst / Readout) | 🟡 Beta | Foundation + grounding done & tested. The 4 concrete agents are **not yet written**, and live runs need `ANTHROPIC_API_KEY`. **This is the headline — not yet end-to-end.** |
 | Warehouse-native analytics (`AnalyticsBackend` + `SqlStore`) | 🟡 Beta | DuckDB live; `SqlStore` runs the same sufficient-statistics queries on any SQLAlchemy SQL warehouse — parity-tested vs DuckDB. Cloud dialects (BigQuery/Snowflake/Databricks) need their driver + creds (untested). |
 | Self-host / VPC deploy | 🟡 Beta | Deployable via Docker/compose + `deploy.md`. "VPC / DPA / security review" are process, not code. |
-| **SSO / SAML / SCIM** | 🗺️ Roadmap | Not in the codebase. Auth today = API keys + dev role header. |
+| SSO bearer tokens (OIDC-style HS256 JWT) | 🟡 Beta | `Authorization: Bearer` JWTs verified (signature + exp), claims → role; tested. RS256/JWKS from an IdP, SAML, and SCIM remain roadmap. |
 | **Usage metering** (AI agent runs + tokens, analyses; `GET /v1/usage`) | ✅ Live | Per-org aggregation from the trace tables; admin-gated; tested. |
 | Invoice computation (rate card × usage; `GET /v1/billing/invoice`) | ✅ Live | Deterministic pricing of metered usage into line items + total; tested. |
 | Charging via a provider (Stripe) | 🗺️ Roadmap | Invoice math is done; the provider charge + webhook is not. Prices illustrative. |
@@ -33,7 +33,8 @@ source of truth the sales materials must not contradict.
   `/v1/.../agents` endpoints. Needs `ANTHROPIC_API_KEY` to run/verify. ~1 build cycle.
 - **Cloud warehouse connector (Roadmap):** `SqlStore` (SQLAlchemy) is live for standard SQL and
   parity-tested; add the dialect driver + warehouse-native idempotent load for BigQuery/Snowflake. Medium.
-- **SSO/SCIM (Roadmap):** add an OIDC/SAML provider behind the pluggable auth in `deps.py`. Medium.
+- **SSO (Roadmap, on the bearer path):** HS256 bearer JWTs are live behind the pluggable auth;
+  add RS256/JWKS from the IdP, SAML, and SCIM provisioning. Medium.
 - **Charging (Roadmap):** metering + invoice computation are live (`/v1/usage`,
   `/v1/billing/invoice`); add a provider (Stripe) charge + webhook on top. Medium.
 

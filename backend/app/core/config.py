@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     agent_model_large: str = "claude-opus-4-8"
     agent_enable_prompt_caching: bool = True
 
+    # ---- SSO (OIDC bearer tokens; HS256 demo verifier — RS256/JWKS is roadmap) ----
+    sso_jwt_secret: str | None = None
+    sso_jwt_audience: str | None = None
+
     # ---- CORS (frontend origin) ----
     frontend_origin: str = "http://localhost:3000"
 
