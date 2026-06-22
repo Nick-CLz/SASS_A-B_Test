@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mallard — project summary</title>
+<style>
+  :root{
+    --accent:#0ea5a4; --accent-d:#0f766e; --ink:#0f172a; --muted:#64748b;
+    --bg:#f6f8fa; --card:#ffffff; --line:#e2e8f0;
+    --ok:#16a34a; --work:#d97706; --plan:#94a3b8; --bad:#dc2626;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 64px}
+  a{color:var(--accent-d)}
+  h1{font-size:34px;margin:0 0 4px;letter-spacing:-.02em}
+  h2{font-size:21px;margin:40px 0 14px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:10px;height:20px;background:var(--accent);border-radius:3px;display:inline-block}
+  p{margin:0 0 12px}
+  .sub{color:var(--muted);font-size:18px;margin:0 0 18px}
+  .hero{background:linear-gradient(135deg,#0f766e,#0ea5a4);color:#fff;border-radius:16px;padding:28px 28px 24px;box-shadow:0 10px 30px rgba(13,148,136,.25)}
+  .hero h1{color:#fff}
+  .hero .sub{color:#d7fbf7}
+  .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+    color:#fff;border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin:2px 6px 2px 0}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+  .stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:12px 14px}
+  .stat b{display:block;font-size:24px}
+  .stat span{font-size:12.5px;color:#d7fbf7}
+  .grid{display:grid;gap:14px}
+  .cols-4{grid-template-columns:repeat(4,1fr)}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px}
+  .card h3{margin:0 0 6px;font-size:15.5px}
+  .card p{font-size:13.5px;color:#334155;margin:0}
+  .pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:700;letter-spacing:.02em}
+  .p-ok{background:#dcfce7;color:#166534}
+  .p-work{background:#fef3c7;color:#92400e}
+  .p-plan{background:#eef2f7;color:#475569}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+  th{background:#f1f5f9;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#475569}
+  tr:last-child td{border-bottom:none}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  .road{display:grid;gap:10px}
+  .ms{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;background:var(--card);
+    border:1px solid var(--line);border-left:5px solid var(--plan);border-radius:10px;padding:12px 14px}
+  .ms.done{border-left-color:var(--ok)} .ms.work{border-left-color:var(--work)}
+  .ms .m{font-weight:700}
+  .ms .d{color:#475569;font-size:13.5px}
+  .bar{height:10px;background:#e9eef4;border-radius:999px;overflow:hidden;margin:6px 0 2px}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,#0ea5a4,#0f766e)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  ul.tight{margin:6px 0 0;padding-left:18px} ul.tight li{margin:3px 0;font-size:13.5px;color:#334155}
+  .note{background:#ecfeff;border:1px solid #a5f3fc;border-radius:10px;padding:12px 14px;font-size:13.5px;color:#155e63}
+  .foot{margin-top:34px;color:var(--muted);font-size:12.5px;text-align:center}
+  code{background:#eef2f7;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+  @media(max-width:760px){.cols-4,.cols-2,.stats,.two{grid-template-columns:1fr 1fr}.ms{grid-template-columns:90px 1fr}.ms .pill{grid-column:2}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>🦆 Mallard</h1>
+    <div class="sub">The AI-native, privacy-first A/B testing &amp; experimentation platform</div>
+    <div>
+      <span class="badge">AI agents run the workflow</span>
+      <span class="badge">Privacy-first</span>
+      <span class="badge">Warehouse-native (DuckDB)</span>
+      <span class="badge">FastAPI · Next.js · Postgres · Claude</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>7 / 8</b><span>milestones (M5 agents: core)</span></div>
+      <div class="stat"><b>13 / 16</b><span>build prompts shipped</span></div>
+      <div class="stat"><b>90 + UI ✓</b><span>backend + frontend tests</span></div>
+      <div class="stat"><b>beta</b><span>engine + dashboard</span></div>
+    </div>
+  </div>
+
+  <h2>What it is</h2>
+  <p>Mallard is an experimentation platform for data-science teams at scale. Its headline feature is a set of
+  <b>AI agents that take over the repetitive parts of the data scientist's job</b> — designing experiments,
+  monitoring their health, running the statistics, and writing the ship / no-ship readout — while a human
+  approves the decisions. The agents are trustworthy because they <b>call a deterministic statistics engine as
+  tools and never invent numbers</b>: every figure is traceable to a tool call.</p>
+
+  <div class="note"><b>Built for two audiences, one codebase.</b> A rigorous, privacy-first portfolio / interview
+  piece <i>and</i> a sellable SaaS for growth/DS teams. The same engine + agents serve both; only the emphasis
+  of the demo and collateral differ.</div>
+
+  <h2>The four pillars</h2>
+  <div class="grid cols-4">
+    <div class="card"><h3>🤖 AI-native</h3><p>Agents design, monitor, analyze &amp; write up experiments — grounded in a real stats engine, fully audited.</p></div>
+    <div class="card"><h3>🔒 Privacy-first</h3><p>Pseudonymous units, no PII in the pipeline, a PII guard at ingestion, and a self-host / warehouse-native option.</p></div>
+    <div class="card"><h3>📊 Statistically serious</h3><p>Frequentist + Bayesian + sequential ("peek any time"), CUPED variance reduction, SRM detection, power analysis.</p></div>
+    <div class="card"><h3>🏬 Warehouse-native</h3><p>DuckDB embedded for the demo; the same SQL runs in Snowflake / BigQuery / Databricks so raw data never leaves.</p></div>
+  </div>
+
+  <h2>Build progress</h2>
+  <div class="bar" title="overall"><i style="width:92%"></i></div>
+  <p style="color:#64748b;font-size:13.5px;margin:0 0 14px">Everything buildable without a model key is done: engine, statistics, analysis, dashboard, SaaS hardening, deploy config, and the case study. The only remainder is the concrete agents (P12–P14), which need an ANTHROPIC_API_KEY.</p>
+  <div class="road">
+    <div class="ms done"><span class="m">M0 · Scaffold</span><span class="d">Repo, FastAPI + Next.js, CI, docker — <span class="mono">P01</span></span><span class="pill p-ok">DONE · merged</span></div>
+    <div class="ms done"><span class="m">M1 · Engine</span><span class="d">Data model <span class="mono">P02</span> · Experiment API + lifecycle <span class="mono">P03</span> · Assignment engine <span class="mono">P04</span> · SDKs <span class="mono">P05</span></span><span class="pill p-ok">DONE</span></div>
+    <div class="ms done"><span class="m">M2 · Data + stats</span><span class="d">Ingestion + DuckDB <span class="mono">P06</span> · Frequentist engine + SRM + power <span class="mono">P07</span> · Analysis API <span class="mono">P09</span></span><span class="pill p-ok">DONE</span></div>
+    <div class="ms done"><span class="m">M3 · Dashboard</span><span class="d">Next.js experiment list + results UI (CIs, SRM banner, Bayesian) <span class="mono">P10</span></span><span class="pill p-ok">DONE</span></div>
+    <div class="ms done"><span class="m">M4 · Adv. stats</span><span class="d">CUPED · sequential (peek-safe) · Bayesian · segments <span class="mono">P08</span></span><span class="pill p-ok">DONE</span></div>
+    <div class="ms work"><span class="m">M5 · AI agents</span><span class="d">Grounded foundation — tools, "never invents numbers", tracing, mock-tested <span class="mono">P11</span> ✓ · concrete agents <span class="mono">P12–P14</span> need an API key</span><span class="pill p-work">FOUNDATION DONE</span></div>
+    <div class="ms done"><span class="m">M6 · SaaS</span><span class="d">RBAC, tenant isolation, audit log, API keys <span class="mono">P15</span></span><span class="pill p-ok">DONE</span></div>
+    <div class="ms done"><span class="m">M7 · Polish</span><span class="d">Runnable demo · deploy config + Dockerfiles · senior-DS case study <span class="mono">P16</span></span><span class="pill p-ok">DONE</span></div>
+  </div>
+
+  <h2>Shipped so far</h2>
+  <table>
+    <tr><th>Prompt</th><th>What it delivered</th><th>Tests</th><th>Status</th></tr>
+    <tr><td class="mono">P01</td><td>Repo scaffold: FastAPI app + <code>/v1/health</code>, Next.js dashboard, CI, Makefile, docker-compose</td><td>4</td><td><span class="pill p-ok">merged</span></td></tr>
+    <tr><td class="mono">P02</td><td>17-table metadata model (SQLModel) + Alembic migration (JSONB on PG, UUIDv7, multi-tenant from day one)</td><td>9</td><td><span class="pill p-ok">merged</span></td></tr>
+    <tr><td class="mono">P03</td><td>Experiment / variant / metric / layer API + lifecycle state machine + typed errors</td><td>20</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P04</td><td>Deterministic assignment engine (bucketing, targeting, layers, holdouts, orthogonality) + <code>/v1/assign</code></td><td>39</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P05</td><td>Python + TypeScript SDKs with local bucketing matching the server (shared golden fixtures)</td><td>28</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P06</td><td>Event ingestion (PII guard, allow-list, idempotent) + DuckDB analytics adapter (sufficient stats)</td><td>51</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P07</td><td>Frequentist stats engine — z/Welch + delta-method lift, SRM, multiple-comparison, power; A/A-calibrated</td><td>65</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">P09</td><td>Analysis pipeline + <code>/analyze</code> · <code>/results</code> · <code>/power</code> (SRM-first, correction, persisted)</td><td>69</td><td><span class="pill p-ok">PR #2</span></td></tr>
+    <tr><td class="mono">beta</td><td><code>make demo</code> — runs the full flow on in-memory stores; prints a sourced readout (winner + an SRM catch)</td><td>—</td><td><span class="pill p-ok">runnable</span></td></tr>
+  </table>
+
+  <h2>Why the statistics matter</h2>
+  <div class="two">
+    <div class="card"><h3>Gets right what cheap tools get wrong</h3>
+      <ul class="tight">
+        <li><b>Delta method</b> for ratio metrics &amp; relative-lift CIs (the #1 silent false-positive source).</li>
+        <li><b>CUPED</b> variance reduction — tighter CIs, same users.</li>
+        <li><b>Sequential / always-valid</b> inference so peeking is safe by default.</li>
+        <li><b>SRM</b> (sample-ratio-mismatch) detection — catch the data bug before the readout.</li>
+      </ul></div>
+    <div class="card"><h3>Trustworthy by construction</h3>
+      <ul class="tight">
+        <li>Stats engine is <b>pure</b> &amp; consumes only sufficient statistics → unit-tested vs textbook fixtures.</li>
+        <li><b>A/A calibration</b> tests (uniform p-values, ≈α false-positive rate) in CI.</li>
+        <li>Assignment is deterministic with <b>cross-language golden fixtures</b> shared by server &amp; SDKs.</li>
+        <li>Every agent number traces to a recorded tool call (no hallucinated p-values).</li>
+      </ul></div>
+  </div>
+
+  <h2>The AI agents (the differentiator)</h2>
+  <div class="grid cols-4">
+    <div class="card"><h3>Designer</h3><p>Turns a hypothesis into a sound, powered experiment — picks unit, OEC + guardrails, and a tool-computed sample size.</p></div>
+    <div class="card"><h3>Health Monitor</h3><p>Watches a running experiment for SRM, guardrail breaches &amp; anomalies; recommends (never auto-executes) a pause.</p></div>
+    <div class="card"><h3>Analyst</h3><p>Runs the correct test per metric, checks SRM first, applies corrections, interprets with honest caveats.</p></div>
+    <div class="card"><h3>Readout Writer</h3><p>Writes a senior-DS-quality ship / no-ship readout — sourced to result rows, ready for stakeholders.</p></div>
+  </div>
+
+  <h2>How it's being built (the cost play)</h2>
+  <p>An expensive model did the high-value work once — the architecture, the statistics design, and a set of
+  <b>16 self-contained build prompts</b> (<span class="mono">P01–P16</span>) with explicit acceptance criteria. A
+  cheaper model then executes them one at a time. Correctness-critical prompts (assignment, statistics) get a
+  bigger model; boilerplate gets a small one. Each prompt ends green (lint + types + tests) and lands in a PR.</p>
+
+  <h2>Current status</h2>
+  <div class="two">
+    <div class="card"><h3>Repository &amp; PRs</h3>
+      <ul class="tight">
+        <li><b>PR #1</b> — plan + P01 + P02 → <b>merged into <code>main</code></b>.</li>
+        <li><b>PR #2</b> — M1 + M2 (P03–P07, P09) + the beta demo → <b>open</b>, CI green.</li>
+        <li>Run it now: <code>make demo</code> (no Postgres/Docker needed).</li>
+      </ul></div>
+    <div class="card"><h3>Quality gates</h3>
+      <ul class="tight">
+        <li>Backend: <b>69 tests</b> · <code>ruff</code> · <code>mypy --strict</code> clean.</li>
+        <li>SDKs: Python <b>8</b> + TypeScript <b>20</b> parity/privacy tests.</li>
+        <li>Frontend: <code>lint</code> · <code>vitest</code> · <code>build</code>. CI runs every stack on each push/PR.</li>
+      </ul></div>
+  </div>
+
+  <h2>Tech stack</h2>
+  <p>
+    <span class="badge" style="background:#0f766e">Python 3.12 · FastAPI · Pydantic v2 · SQLModel</span>
+    <span class="badge" style="background:#0f766e">NumPy · SciPy · statsmodels</span>
+    <span class="badge" style="background:#0f766e">PostgreSQL (metadata)</span>
+    <span class="badge" style="background:#0f766e">DuckDB → warehouse (analytics)</span>
+    <span class="badge" style="background:#0f766e">Anthropic Claude (agents)</span>
+    <span class="badge" style="background:#0f766e">Next.js · TypeScript · Tailwind · TanStack Query · Recharts</span>
+    <span class="badge" style="background:#0f766e">Docker · GitHub Actions</span>
+  </p>
+
+  <div class="foot">
+    Mallard (working title) — generated project summary · build M0 complete, M1 in progress.<br/>
+    Plan lives in <code>docs/</code>; the build steps in <code>prompts/</code>.
+  </div>
+
+</div>
+</body>
+</html>

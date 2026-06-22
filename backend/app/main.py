@@ -7,12 +7,23 @@ Run locally with::
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app import __version__
 from app.api.v1 import api_router
 from app.core import configure_logging, get_settings
+from app.core.errors import DomainError
+
+
+async def domain_error_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Render expected domain errors as typed JSON (see docs/06-api-and-sdk.md)."""
+    assert isinstance(exc, DomainError)
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": {"code": exc.code, "message": exc.message}},
+    )
 
 
 def create_app() -> FastAPI:
@@ -34,6 +45,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    app.add_exception_handler(DomainError, domain_error_handler)
     app.include_router(api_router)
     return app
 
