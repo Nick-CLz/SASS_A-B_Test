@@ -9,9 +9,11 @@ from fastapi import APIRouter, Depends
 from app.api.deps import SessionDep, TenantDep, require_min_role
 from app.models.enums import MembershipRole
 from app.schemas.admin import ApiKeyCreate, ApiKeyCreated, ApiKeyRead, AuditEntryRead
+from app.schemas.billing import InvoiceLineRead, InvoiceRead
 from app.schemas.usage import UsageRead
 from app.services import api_keys as keys_svc
 from app.services import audit as audit_svc
+from app.services import billing as billing_svc
 from app.services import usage as usage_svc
 
 router = APIRouter(tags=["admin"])
@@ -57,4 +59,30 @@ def usage(
         agent_cost_tokens=summary.agent_cost_tokens,
         analyses=summary.analyses,
         agent_runs_by_type=summary.agent_runs_by_type,
+    )
+
+
+@router.get("/billing/invoice", response_model=InvoiceRead, dependencies=[_admin])
+def billing_invoice(
+    session: SessionDep,
+    ctx: TenantDep,
+    since: datetime | None = None,
+    until: datetime | None = None,
+) -> InvoiceRead:
+    summary = usage_svc.usage_summary(session, ctx.org_id, since=since, until=until)
+    invoice = billing_svc.compute_invoice(summary)
+    return InvoiceRead(
+        currency=invoice.currency,
+        period_start=summary.period_start,
+        period_end=summary.period_end,
+        total=invoice.total,
+        lines=[
+            InvoiceLineRead(
+                description=line.description,
+                quantity=line.quantity,
+                unit_price=line.unit_price,
+                amount=line.amount,
+            )
+            for line in invoice.lines
+        ],
     )

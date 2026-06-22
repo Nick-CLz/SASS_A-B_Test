@@ -24,7 +24,8 @@ source of truth the sales materials must not contradict.
 | Self-host / VPC deploy | 🟡 Beta | Deployable via Docker/compose + `deploy.md`. "VPC / DPA / security review" are process, not code. |
 | **SSO / SAML / SCIM** | 🗺️ Roadmap | Not in the codebase. Auth today = API keys + dev role header. |
 | **Usage metering** (AI agent runs + tokens, analyses; `GET /v1/usage`) | ✅ Live | Per-org aggregation from the trace tables; admin-gated; tested. |
-| Billing provider (Stripe) on top of metering | 🗺️ Roadmap | Metering is done; invoicing/charging is not. Tier prices are illustrative. |
+| Invoice computation (rate card × usage; `GET /v1/billing/invoice`) | ✅ Live | Deterministic pricing of metered usage into line items + total; tested. |
+| Charging via a provider (Stripe) | 🗺️ Roadmap | Invoice math is done; the provider charge + webhook is not. Prices illustrative. |
 | Cloud warehouse dialects (BigQuery/Snowflake/Databricks) | 🗺️ Roadmap | `SqlStore` covers standard SQL; cloud-specific drivers + warehouse-native idempotent load aren't wired/tested. |
 
 ## What each gap takes to close
@@ -33,8 +34,8 @@ source of truth the sales materials must not contradict.
 - **Cloud warehouse connector (Roadmap):** `SqlStore` (SQLAlchemy) is live for standard SQL and
   parity-tested; add the dialect driver + warehouse-native idempotent load for BigQuery/Snowflake. Medium.
 - **SSO/SCIM (Roadmap):** add an OIDC/SAML provider behind the pluggable auth in `deps.py`. Medium.
-- **Billing (Roadmap, on top of metering):** usage metering is live (`GET /v1/usage`); add a
-  billing provider (Stripe) to invoice against it. Medium.
+- **Charging (Roadmap):** metering + invoice computation are live (`/v1/usage`,
+  `/v1/billing/invoice`); add a provider (Stripe) charge + webhook on top. Medium.
 
 ## Rule
 The pitch may show **vision**, but anything presented as *available in a tier* must be ✅ Live here,
