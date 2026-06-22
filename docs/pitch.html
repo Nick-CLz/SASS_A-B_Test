@@ -172,10 +172,11 @@
     <div class="card"><div class="ic">📊</div><h3>Statistics most tools get wrong <span class="badge2 b-ok">LIVE</span></h3>
       <p>Delta-method CIs, CUPED variance reduction, always-valid sequential testing (peek anytime),
          Bayesian decisions, SRM, and power — calibrated and validated against scipy/statsmodels.</p></div>
-    <div class="card"><div class="ic">🦆</div><h3>Privacy-first <span class="badge2 b-ok">LIVE</span> · warehouse-native <span class="badge2 b-road">ROADMAP</span></h3>
-      <p>Pseudonymous units and a PII guard that rejects emails/IPs before storage — that part is
-         live and tested. Analytics run embedded on DuckDB today; warehouse connectors
-         (BigQuery / Snowflake / Databricks) so raw data stays in your perimeter are on the roadmap.</p></div>
+    <div class="card"><div class="ic">🦆</div><h3>Privacy-first <span class="badge2 b-ok">LIVE</span> · warehouse-native <span class="badge2 b-beta">BETA</span></h3>
+      <p>Pseudonymous units and a PII guard that rejects emails/IPs before storage — live and
+         tested. Analytics run on DuckDB or any SQL warehouse through a pluggable backend
+         (parity-tested); cloud dialects like BigQuery/Snowflake need their driver — so raw data
+         can stay in your perimeter.</p></div>
   </div>
 </section>
 
@@ -230,7 +231,7 @@
           <li>Everything in Free</li>
           <li><b>AI agents</b> (metered usage) <span class="mk beta">BETA</span></li>
           <li>CUPED · sequential · Bayesian</li>
-          <li>Warehouse connector <span class="mk road">ROADMAP</span></li>
+          <li>Warehouse connector <span class="mk beta">BETA</span></li>
           <li>RBAC + audit · unlimited viewers</li>
         </ul>
         <a class="btn dark" href="#demo">Start a trial</a>
@@ -263,9 +264,10 @@
       </div>
     </div>
     <div class="avail"><b>Availability today:</b> the engine, statistics, privacy guard, dashboard,
-      RBAC / audit / API-keys, and <b>usage metering</b> are <b>live and tested</b>. AI agents are
-      <b>beta</b> (need a model key); SSO/SCIM, additional warehouse connectors, self-host, and
-      billing-provider integration are <b>roadmap</b>. Full map: <code>docs/build-status.md</code>.</div>
+      RBAC / audit / API-keys, and <b>usage metering</b> are <b>live and tested</b>. AI agents and
+      the <b>SQL warehouse backend</b> are <b>beta</b>; SSO/SCIM, cloud warehouse dialects,
+      self-host, and billing-provider integration are <b>roadmap</b>. Full map:
+      <code>docs/build-status.md</code>.</div>
     <p style="text-align:center;color:var(--muted);font-size:12.5px;margin-top:14px">
       Prices illustrative (pricing hypotheses, see <code>docs/11-sales.md</code>). AI-agent usage is
       metered — model routing + prompt caching keep margins healthy.</p>

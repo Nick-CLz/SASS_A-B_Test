@@ -10,7 +10,7 @@ from typing import Any
 
 from sqlmodel import Session, desc, select
 
-from app.analytics.store import DuckStore
+from app.analytics.base import AnalyticsBackend
 from app.core.errors import InvariantError, NotFoundError
 from app.models.analysis import AnalysisRun, MetricResult, SrmCheck
 from app.models.enums import AnalysisStatus, AnalysisTrigger, MetricType
@@ -55,7 +55,7 @@ def _event_name(metric: Metric) -> str:
 
 def analyze_experiment(
     session: Session,
-    store: DuckStore,
+    store: AnalyticsBackend,
     org_id: uuid.UUID,
     workspace_id: uuid.UUID,
     key: str,
@@ -106,7 +106,7 @@ def analyze_experiment(
 
 
 def _compute_rows(
-    store: DuckStore,
+    store: AnalyticsBackend,
     ws: str,
     key: str,
     variants: list[Variant],

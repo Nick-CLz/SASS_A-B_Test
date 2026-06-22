@@ -15,7 +15,7 @@ from fastapi import Depends, Header
 from pydantic import BaseModel
 from sqlmodel import Session
 
-from app.analytics import DuckStore, get_store_singleton
+from app.analytics import AnalyticsBackend, get_store_singleton
 from app.assignment.exposure import ExposureSink
 from app.core.db import get_session
 from app.core.errors import ForbiddenError, NotFoundError, UnauthorizedError
@@ -90,12 +90,12 @@ def require_min_role(minimum: MembershipRole) -> Callable[[TenantContext], None]
     return checker
 
 
-def get_store() -> DuckStore:
-    """The analytics store (DuckDB). Overridden in tests with an in-memory store."""
+def get_store() -> AnalyticsBackend:
+    """The analytics backend (DuckDB by default). Overridden in tests with an in-memory store."""
     return get_store_singleton()
 
 
-StoreDep = Annotated[DuckStore, Depends(get_store)]
+StoreDep = Annotated[AnalyticsBackend, Depends(get_store)]
 
 
 def get_exposure_sink(store: StoreDep) -> ExposureSink:

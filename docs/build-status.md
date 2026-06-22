@@ -20,18 +20,18 @@ source of truth the sales materials must not contradict.
 | Multi-tenancy + RBAC + audit log + API keys | ✅ Live | Tenant isolation proven by test. |
 | Grounded-AI mechanism ("never invents numbers") | ✅ Live | Tools + ungrounded-number check + persisted traces; tested with a mock model. |
 | **AI agents** (Designer / Monitor / Analyst / Readout) | 🟡 Beta | Foundation + grounding done & tested. The 4 concrete agents are **not yet written**, and live runs need `ANTHROPIC_API_KEY`. **This is the headline — not yet end-to-end.** |
-| "Runs on **your warehouse**" (BigQuery / Snowflake / Databricks) | 🗺️ Roadmap | Only DuckDB is implemented. Warehouse names exist as enum values; **no connector code.** Designed as an adapter swap. |
+| Warehouse-native analytics (`AnalyticsBackend` + `SqlStore`) | 🟡 Beta | DuckDB live; `SqlStore` runs the same sufficient-statistics queries on any SQLAlchemy SQL warehouse — parity-tested vs DuckDB. Cloud dialects (BigQuery/Snowflake/Databricks) need their driver + creds (untested). |
 | Self-host / VPC deploy | 🟡 Beta | Deployable via Docker/compose + `deploy.md`. "VPC / DPA / security review" are process, not code. |
 | **SSO / SAML / SCIM** | 🗺️ Roadmap | Not in the codebase. Auth today = API keys + dev role header. |
 | **Usage metering** (AI agent runs + tokens, analyses; `GET /v1/usage`) | ✅ Live | Per-org aggregation from the trace tables; admin-gated; tested. |
 | Billing provider (Stripe) on top of metering | 🗺️ Roadmap | Metering is done; invoicing/charging is not. Tier prices are illustrative. |
-| Additional warehouse connectors | 🗺️ Roadmap | Only DuckDB today. |
+| Cloud warehouse dialects (BigQuery/Snowflake/Databricks) | 🗺️ Roadmap | `SqlStore` covers standard SQL; cloud-specific drivers + warehouse-native idempotent load aren't wired/tested. |
 
 ## What each gap takes to close
 - **AI agents (Beta → Live):** write the 4 agents on the existing runner + grounding; add
   `/v1/.../agents` endpoints. Needs `ANTHROPIC_API_KEY` to run/verify. ~1 build cycle.
-- **Warehouse connector (Roadmap → Beta):** implement the `AnalyticsBackend` adapter interface
-  against the existing sufficient-statistics queries; add one connector (e.g. BigQuery). Medium.
+- **Cloud warehouse connector (Roadmap):** `SqlStore` (SQLAlchemy) is live for standard SQL and
+  parity-tested; add the dialect driver + warehouse-native idempotent load for BigQuery/Snowflake. Medium.
 - **SSO/SCIM (Roadmap):** add an OIDC/SAML provider behind the pluggable auth in `deps.py`. Medium.
 - **Billing (Roadmap, on top of metering):** usage metering is live (`GET /v1/usage`); add a
   billing provider (Stripe) to invoice against it. Medium.

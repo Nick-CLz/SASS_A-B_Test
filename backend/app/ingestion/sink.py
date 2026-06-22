@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from app.analytics.store import DuckStore, new_id
+from app.analytics.base import AnalyticsBackend
+from app.analytics.store import new_id
 from app.assignment.exposure import ExposureEvent
 from app.models.base import utcnow
 
 
 class DuckExposureSink:
-    """Implements the ExposureSink protocol by writing exposures to the analytics store."""
+    """Implements the ExposureSink protocol by writing exposures to the analytics backend."""
 
-    def __init__(self, store: DuckStore) -> None:
+    def __init__(self, store: AnalyticsBackend) -> None:
         self._store = store
 
     def log(self, event: ExposureEvent) -> None:

@@ -30,7 +30,9 @@ class Settings(BaseSettings):
     # ---- metadata database (Postgres) ----
     database_url: str = "postgresql+psycopg://mallard:mallard@localhost:5432/mallard"
 
-    # ---- analytics engine (DuckDB) ----
+    # ---- analytics engine ----
+    analytics_backend: Literal["duckdb", "sql"] = "duckdb"
+    analytics_sql_url: str | None = None  # defaults to DATABASE_URL when backend = "sql"
     duckdb_path: str = "./data/analytics.duckdb"
 
     # ---- Anthropic / Claude (AI agents) ----

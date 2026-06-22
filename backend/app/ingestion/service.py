@@ -12,7 +12,8 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
-from app.analytics.store import DuckStore, EventRow, ExposureRow, new_id
+from app.analytics.base import AnalyticsBackend, EventRow, ExposureRow
+from app.analytics.store import new_id
 from app.ingestion.pii import pii_reason
 from app.models.base import utcnow
 from app.schemas.events import EventIn, EventsRequest, RejectedItem
@@ -48,7 +49,7 @@ def _json(obj: dict[str, Any]) -> str:
 
 
 def ingest_events(
-    store: DuckStore,
+    store: AnalyticsBackend,
     workspace_id: uuid.UUID,
     event_schema: dict[str, Any] | None,
     payload: EventsRequest,

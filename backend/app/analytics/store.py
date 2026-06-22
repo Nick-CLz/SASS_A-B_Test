@@ -11,12 +11,12 @@ from __future__ import annotations
 import os
 import uuid
 from collections.abc import Sequence
-from datetime import datetime
 
 import duckdb
 
-ExposureRow = tuple[str, str, str, str, str, datetime, str]
-EventRow = tuple[str, str, str, str, datetime, float | None, str]
+from app.analytics.base import EventRow, ExposureRow
+
+__all__ = ["DuckStore", "EventRow", "ExposureRow", "new_id"]
 
 
 class DuckStore:

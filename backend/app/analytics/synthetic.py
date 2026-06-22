@@ -10,7 +10,8 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.analytics.store import DuckStore, EventRow, ExposureRow, new_id
+from app.analytics.base import AnalyticsBackend, EventRow, ExposureRow
+from app.analytics.store import new_id
 from app.models.base import utcnow
 
 
@@ -26,7 +27,7 @@ class SyntheticSpec:
 
 
 def generate_conversions(
-    store: DuckStore,
+    store: AnalyticsBackend,
     spec: SyntheticSpec,
     *,
     control_rate: float = 0.10,
@@ -54,7 +55,7 @@ def generate_conversions(
 
 
 def generate_continuous(
-    store: DuckStore,
+    store: AnalyticsBackend,
     spec: SyntheticSpec,
     *,
     control_mean: float = 10.0,
