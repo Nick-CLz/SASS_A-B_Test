@@ -1,4 +1,4 @@
-.PHONY: help setup dev test lint build
+.PHONY: help setup dev demo seed test lint build
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -22,3 +22,9 @@ lint: ## Lint + type-check backend and frontend
 
 build: ## Build the frontend (and backend image via compose)
 	cd frontend && pnpm build
+
+demo: ## Run the standalone beta demo (no Postgres/Docker needed)
+	cd backend && uv run python -m scripts.demo
+
+seed: ## Seed a local org+workspace+metric; prints the workspace id + an API key
+	cd backend && uv run python -m scripts.seed

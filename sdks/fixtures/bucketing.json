@@ -1,0 +1,26 @@
+{
+  "_comment": "Cross-language assignment contract. The Python backend (app.assignment) and every SDK (P05) MUST reproduce these exactly. Hash: bucket = uint64(SHA256(f'{salt}:{unit_id}')[:8], big-endian) / 2**64. Variant sub-bucket uses salt '{salt}:variant'; traffic gate uses '{salt}:traffic'. See docs/04-statistics-engine.md#assignment.",
+  "bucket": [
+    { "salt": "checkout", "unit_id": "user-1", "bucket": 0.16570486396628972 },
+    { "salt": "checkout", "unit_id": "user-2", "bucket": 0.07222034396738858 },
+    { "salt": "checkout", "unit_id": "abc123", "bucket": 0.6819469718640931 },
+    { "salt": "new_banner", "unit_id": "user-1", "bucket": 0.9922455488173296 },
+    { "salt": "salt:variant", "unit_id": "user-1", "bucket": 0.22219776944939432 },
+    { "salt": "", "unit_id": "user-1", "bucket": 0.5430342977493744 }
+  ],
+  "assignment_spec": {
+    "key": "checkout",
+    "salt": "checkout",
+    "traffic_pct": 100.0,
+    "variants": [
+      { "key": "control", "allocation_pct": 70 },
+      { "key": "treatment", "allocation_pct": 30 }
+    ]
+  },
+  "assignment": [
+    { "unit_id": "user-1", "variant_key": "control" },
+    { "unit_id": "user-2", "variant_key": "treatment" },
+    { "unit_id": "user-3", "variant_key": "control" },
+    { "unit_id": "abc123", "variant_key": "control" }
+  ]
+}

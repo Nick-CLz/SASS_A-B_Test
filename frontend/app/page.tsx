@@ -2,36 +2,60 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { ExperimentTable } from "@/components/experiment-table";
 import { HealthBadge, type HealthState } from "@/components/health-badge";
-import { getHealth } from "@/lib/api";
+import { Card } from "@/components/ui";
+import { API_BASE_URL, getHealth, listExperiments, WORKSPACE_ID } from "@/lib/api";
 
 export default function Home() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["health"],
-    queryFn: getHealth,
+  const health = useQuery({ queryKey: ["health"], queryFn: getHealth, retry: false });
+  const experiments = useQuery({
+    queryKey: ["experiments"],
+    queryFn: listExperiments,
     retry: false,
+    enabled: Boolean(WORKSPACE_ID),
   });
-
-  const state: HealthState = isLoading ? "loading" : isError ? "error" : "ok";
+  const state: HealthState = health.isLoading ? "loading" : health.isError ? "error" : "ok";
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center gap-6 p-8">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Mallard</h1>
-        <p className="text-muted-foreground">
-          AI-native, privacy-first A/B testing platform.
-        </p>
-      </div>
-      <div className="flex items-center gap-3">
-        <HealthBadge state={state} />
-        {data ? (
-          <span className="text-sm text-muted-foreground">v{data.version}</span>
-        ) : null}
-      </div>
-      <p className="text-sm text-muted-foreground">
-        Scaffold (P01). The dashboard is built in P10 — see{" "}
-        <code className="rounded bg-muted px-1 py-0.5">prompts/P10-dashboard.md</code>.
-      </p>
+    <main className="mx-auto flex max-w-4xl flex-col gap-6 p-8">
+      <header className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Mallard</h1>
+          <p className="text-sm text-muted-foreground">Experiments</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <HealthBadge state={state} />
+          {health.data ? (
+            <span className="text-xs text-muted-foreground">v{health.data.version}</span>
+          ) : null}
+        </div>
+      </header>
+
+      {!WORKSPACE_ID ? (
+        <Card>
+          <p className="text-sm">
+            Set <code className="rounded bg-muted px-1">NEXT_PUBLIC_WORKSPACE_ID</code> to a
+            workspace id to load experiments from the API.
+          </p>
+        </Card>
+      ) : experiments.isError ? (
+        <Card>
+          <p className="text-sm">
+            Could not load experiments from{" "}
+            <code className="rounded bg-muted px-1">{API_BASE_URL}</code>. Make sure the API is
+            running.
+          </p>
+        </Card>
+      ) : (
+        <Card>
+          {experiments.data ? (
+            <ExperimentTable experiments={experiments.data} />
+          ) : (
+            <p className="text-sm text-muted-foreground">Loading…</p>
+          )}
+        </Card>
+      )}
     </main>
   );
 }
